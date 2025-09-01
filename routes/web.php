@@ -2,26 +2,28 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController; // HomeControllerを使うための宣言を追加
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\QuizController; // QuizControllerを使う宣言を追加
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// この部分をHomeControllerを呼び出すように変更
+// ログイン後のダッシュボード（ホーム画面）
 Route::get('/dashboard', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
+
+// クイズ画面表示用の新しいルートを追加
+// {tile} の部分には、挑戦する牌のIDが入ります (例: /quiz/1)
+Route::get('/quiz/{tile}', [QuizController::class, 'show'])
+    ->middleware(['auth', 'verified'])->name('quiz.show');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
