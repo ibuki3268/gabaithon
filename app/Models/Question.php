@@ -23,7 +23,7 @@ class Question extends Model
 
 
     /**
-     * ‚±‚Ì–â‘è‚ª‘®‚·‚é”viTilej‚ğæ“¾‚·‚é (‘½‘Î1)
+     * ï¿½ï¿½ï¿½Ì–ï¿½è‚ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iTileï¿½jï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½1)
      */
     public function tile(): BelongsTo
     {
@@ -31,10 +31,22 @@ class Question extends Model
     }
 
     /**
-     * ‚±‚Ì–â‘è‚ª‚Â‘I‘ğˆiChoicesj‚ğæ“¾‚·‚é (1‘Î‘½)
+     * ï¿½ï¿½ï¿½Ì–ï¿½è‚ªï¿½ï¿½ï¿½Â‘Iï¿½ï¿½ï¿½ï¿½ï¿½iChoicesï¿½jï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ (1ï¿½Î‘ï¿½)
      */
-    public function choices(): HasMany
+
+
+    protected $table = 'questions'; // ãƒ†ãƒ¼ãƒ–ãƒ«å
+    protected $casts = [
+        'content' => 'array', // JSONã‚«ãƒ©ãƒ ã‚’è‡ªå‹•ã§é…åˆ—ã«å¤‰æ›
+    ];
+
+    public function difficulty()//ä¸€ã¤ã®é›£æ˜“åº¦ã«å±ã™ã‚‹
     {
-        return $this->hasMany(Choice::class);
+        return $this->belongsTo(Difficulty::class);
+    }
+    // é–“æ¥çš„ã«ã‚³ãƒ¼ã‚¹ã‚’å–å¾—
+    public function course()
+    {
+        return $this->difficulty->course;
     }
 }

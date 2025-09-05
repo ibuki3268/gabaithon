@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id(); // 問題を区別するためのID
-            $table->foreignId('tile_id')->constrained()->onDelete('cascade'); // どの牌に属する問題か
-            $table->text('question_text'); // 問題文
+            //$table->foreignId('course_id')->constrained()->onDelete('cascade'); // どの牌に属する問題か
+            //$table->foreignId('difficulty_id')->constrained()->onDelete('cascade');
+            $table->integer('day');
+            $table->json('question');
             $table->timestamps(); // 作成日時など
         });
     }
