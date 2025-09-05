@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Tile;       // 「App\Models\Tile」から「App\Tile」に修正
-use App\Question;   // 「App\Models\Question」から「App\Question」に修正
+use App\Models\Tile;       // 「App\Models\Tile」から「App\Tile」に修正
+use App\Models\Question;   // 「App\Models\Question」から「App\Question」に修正
 
 class QuizSeeder extends Seeder
 {

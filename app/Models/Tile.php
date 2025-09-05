@@ -4,17 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany; // ‚±‚Ìs‚ð’Ç‰Á
+use Illuminate\Database\Eloquent\Relations\HasMany; // ï¿½ï¿½ï¿½Ìsï¿½ï¿½Ç‰ï¿½
 
 class Tile extends Model
 {
     use HasFactory;
 
     /**
-     * ‚±‚Ì”v‚ªŽ‚Â–â‘èiQuestionsj‚ðŽæ“¾‚·‚é (1‘Î‘½)
+     * ï¿½ï¿½ï¿½Ì”vï¿½ï¿½ï¿½ï¿½ï¿½Â–ï¿½ï¿½iQuestionsï¿½jï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ (1ï¿½Î‘ï¿½)
      */
     public function questions(): HasMany
     {
         return $this->hasMany(Question::class);
     }
+
+    protected $fillable = [
+        'name',
+        'type',
+        'num',
+        'image_path',
+    ];
 }
