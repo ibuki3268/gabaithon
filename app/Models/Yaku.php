@@ -19,4 +19,14 @@ class Yaku extends Model
     protected $casts = [
         'structure' => 'array', // JSONを配列として扱えるようにする
     ];
+        public function progresses()
+    {
+        return $this->hasMany(Progress::class);
+    }
+    
+    // この役を学習中のユーザー
+    public function users()
+    {
+        return $this->hasManyThrough(User::class, Progress::class);
+    }
 }

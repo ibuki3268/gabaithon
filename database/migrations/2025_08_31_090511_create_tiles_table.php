@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('tiles', function (Blueprint $table) {
             $table->id(); // 牌を区別するためのID
-            $table->string('title'); // 牌の名前
-            $table->text('description')->nullable(); // 牌の簡単な説明（任意）
+            $table->string('name'); // 牌の名前
+            $table->string('type');
+            $table->integer('num')->nullable();
+            $table->string('image_path')->nullable();
             $table->timestamps(); // 作成日時など
         });
     }

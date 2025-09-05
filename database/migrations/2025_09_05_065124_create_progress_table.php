@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('progress', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('course_id');
-            $table->foreignId('difficulty_id');
-            $table->foreignId('yaku_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('course_id')->constrained()->onDelete('cascade');
+            $table->foreignId('difficulty_id')->constrained()->onDelete('cascade');
+            $table->foreignId('yaku_id')->constrained()->onDelete('cascade');
+            $table->integer('day');
             $table->json('progresses');//どの牌を解放したか
-            $table->boolean('complete')->default(false);
+            $table->string('status');
             $table->timestamps();
         });
     }

@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('difficulties', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id');
+            $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->json('choice');
             $table->timestamps();
         });
     }
