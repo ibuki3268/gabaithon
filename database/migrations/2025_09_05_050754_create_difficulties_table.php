@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tiles', function (Blueprint $table) {
-            $table->id(); // 牌を区別するためのID
-            $table->string('title'); // 牌の名前
-            $table->text('description')->nullable(); // 牌の簡単な説明（任意）
-            $table->timestamps(); // 作成日時など
+        Schema::create('difficulties', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('course_id');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tiles');
+        Schema::dropIfExists('difficulties');
     }
 };
