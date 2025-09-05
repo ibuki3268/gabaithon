@@ -12,10 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
-            $table->foreignId('progress_id');//進捗管理テーブルのID追加
-            $table->integer('points')->default(0);//点棒管理用（ガチャ石）
-            
+            $table->dropForeign(['progress_id']);
+            $table->dropColumn('progress_id');
         });
     }
 
@@ -25,10 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
-            $table->dropForeign(['progress_id']);
-            $table->dropColumn('progress_id');
-            $table->dropColumn('points');
+            $table->foreignId('progress_id')->nullable()->constrained('progress')->onDelete('set null');
         });
     }
 };

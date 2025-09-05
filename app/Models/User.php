@@ -42,4 +42,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // 1ユーザーは複数の進捗を持つ
+    public function progresses()
+    {
+        return $this->hasMany(Progress::class);
+    }
+    // 特定コースの進捗
+    public function progressInCourse($courseId)
+    {
+        return $this->progresses()->where('course_id', $courseId);
+    }
 }

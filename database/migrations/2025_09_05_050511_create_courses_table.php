@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('category');
             $table->text('description')->nullable();
+            $table->foreignId('created_by')->nullable()->default(null)->constrained('users')->onDelete('set null');
+            $table->boolean('is_public')->default(true);
             $table->timestamps();
         });
     }
