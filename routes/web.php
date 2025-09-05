@@ -16,7 +16,7 @@ use App\Http\Controllers\QuizController; // QuizController���g���錾
 // });
 
 // ���O�C����̃_�b�V���{�[�h�i�z�[����ʁj
-Route::get('/', [HomeController::class, 'index'])
+Route::get('/dashboard', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
 // �N�C�Y��ʕ\���p�̐V�������[�g��ǉ�
