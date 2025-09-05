@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\QuizController; // QuizController‚ðŽg‚¤éŒ¾‚ð’Ç‰Á
+use App\Http\Controllers\QuizController; // QuizControllerï¿½ï¿½ï¿½gï¿½ï¿½ï¿½éŒ¾ï¿½ï¿½Ç‰ï¿½
 
 /*
 |--------------------------------------------------------------------------
@@ -11,16 +11,16 @@ use App\Http\Controllers\QuizController; // QuizController‚ðŽg‚¤éŒ¾‚ð’Ç‰Á
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-// ƒƒOƒCƒ“Œã‚Ìƒ_ƒbƒVƒ…ƒ{[ƒhiƒz[ƒ€‰æ–Êj
-Route::get('/dashboard', [HomeController::class, 'index'])
+// ï¿½ï¿½ï¿½Oï¿½Cï¿½ï¿½ï¿½ï¿½Ìƒ_ï¿½bï¿½Vï¿½ï¿½ï¿½{ï¿½[ï¿½hï¿½iï¿½zï¿½[ï¿½ï¿½ï¿½ï¿½Êj
+Route::get('/', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
-// ƒNƒCƒY‰æ–Ê•\Ž¦—p‚ÌV‚µ‚¢ƒ‹[ƒg‚ð’Ç‰Á
-// {tile} ‚Ì•”•ª‚É‚ÍA’§í‚·‚é”v‚ÌID‚ª“ü‚è‚Ü‚· (—á: /quiz/1)
+// ï¿½Nï¿½Cï¿½Yï¿½ï¿½Ê•\ï¿½ï¿½ï¿½pï¿½ÌVï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½gï¿½ï¿½Ç‰ï¿½
+// {tile} ï¿½Ì•ï¿½ï¿½ï¿½ï¿½É‚ÍAï¿½ï¿½ï¿½í‚·ï¿½ï¿½vï¿½ï¿½IDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ (ï¿½ï¿½: /quiz/1)
 Route::get('/quiz/{tile}', [QuizController::class, 'show'])
     ->middleware(['auth', 'verified'])->name('quiz.show');
 
