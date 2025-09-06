@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "教育・学習・指導",
+            "options": ["teaching", "learning", "education", "instruction"],
+            "answer": "education"
+        },
+        {
+            "question": "技術・技能・テクノロジー",
+            "options": ["skill", "technology", "technique", "craft"],
+            "answer": "technology"
+        }
+    ]
+}

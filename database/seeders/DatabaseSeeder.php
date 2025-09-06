@@ -12,10 +12,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // ˆÈ‰º‚Ì2s‚ğ’Ç‰Á‚µ‚Ü‚·
+        // ï¿½È‰ï¿½ï¿½ï¿½2ï¿½sï¿½ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½
         $this->call([
             TileSeeder::class,
-            QuizSeeder::class, // QuizSeeder‚ğŒÄ‚Ño‚·‚æ‚¤‚É’Ç‰Á
+            YakuSeeder::class,
+            CourseSeeder::class,
+            DifficultySeeder::class,
+            QuestionSeeder::class, // QuestionSeederï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½æ‚¤ï¿½É’Ç‰ï¿½
         ]);
     }
 }

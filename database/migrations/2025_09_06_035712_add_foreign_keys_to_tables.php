@@ -16,7 +16,7 @@ return new class extends Migration
         // questionsテーブルに外部キーを追加
         Schema::table('questions', function (Blueprint $table) {
             $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
-            $table->foreignId('difficulty_id')->constrained('progress')->onDelete('cascade');
+            $table->foreignId('difficulty_id')->constrained('difficulties')->onDelete('cascade');
         });
         
         // 他に必要な外部キーがあれば追加

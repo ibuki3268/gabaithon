@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "力・能力・影響",
+            "options": ["power", "strength", "ability", "force"],
+            "answer": "power"
+        },
+        {
+            "question": "時間・時刻・瞬間",
+            "options": ["moment", "time", "hour", "instant"],
+            "answer": "time"
+        }
+    ]
+}
