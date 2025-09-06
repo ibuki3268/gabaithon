@@ -23,7 +23,7 @@ class Question extends Model
 
 
     /**
-     * ï¿½ï¿½ï¿½Ì–ï¿½è‚ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iTileï¿½jï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½1)
+     * ?¿½?¿½?¿½Ì–ï¿½è‚ª?¿½?¿½?¿½?¿½?¿½?¿½v?¿½iTile?¿½j?¿½?¿½?¿½æ“¾?¿½?¿½?¿½?¿½ (?¿½?¿½?¿½?¿½1)
      */
     public function tile(): BelongsTo
     {
@@ -31,20 +31,20 @@ class Question extends Model
     }
 
     /**
-     * ï¿½ï¿½ï¿½Ì–ï¿½è‚ªï¿½ï¿½ï¿½Â‘Iï¿½ï¿½ï¿½ï¿½ï¿½iChoicesï¿½jï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ (1ï¿½Î‘ï¿½)
+     * ?¿½?¿½?¿½Ì–ï¿½è‚ª?¿½?¿½?¿½Â‘I?¿½?¿½?¿½?¿½?¿½iChoices?¿½j?¿½?¿½?¿½æ“¾?¿½?¿½?¿½?¿½ (1?¿½Î‘ï¿½)
      */
 
 
-    protected $table = 'questions'; // ãƒ†ãƒ¼ãƒ–ãƒ«å
+    protected $table = 'questions'; // ãƒ?ãƒ¼ãƒ–ãƒ«å?
     protected $casts = [
-        'content' => 'array', // JSONã‚«ãƒ©ãƒ ã‚’è‡ªå‹•ã§é…åˆ—ã«å¤‰æ›
+        'content' => 'array', // JSONã‚«ãƒ©ãƒ?ã‚’è?ªå‹•ã§é…å?—ã«å¤‰æ›
     ];
 
-    public function difficulty()//ä¸€ã¤ã®é›£æ˜“åº¦ã«å±ã™ã‚‹
+    public function difficulty()//ä¸€ã¤ã®é›£æ˜“åº¦ã«å±ã™ã‚?
     {
         return $this->belongsTo(Difficulty::class);
     }
-    // é–“æ¥çš„ã«ã‚³ãƒ¼ã‚¹ã‚’å–å¾—
+    // é–“æ¥çš?ã«ã‚³ãƒ¼ã‚¹ã‚’å–å¾?
     public function course()
     {
         return $this->difficulty->course;

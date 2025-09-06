@@ -104,10 +104,10 @@
                                         <button @click="step = 4; selectedSubCategory = '1翻役'" class="w-full text-left p-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition mb-3">
                                             <div class="font-semibold">1翻役</div>
                                         </button>
-                                        <button @click="step = 4; selectedSubCategory = '役満'" class="w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition mb-3">
+                                        <button @click="step = 4; selectedSubCategory = '2翻役'" class="w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition mb-3">
                                             <div class="font-semibold">2翻役</div>
                                         </button>
-                                        <button @click="step = 4; selectedSubCategory = '2翻役'" class="w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition">
+                                        <button @click="step = 4; selectedSubCategory = '役満'" class="w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition">
                                             <div class="font-semibold">役満</div>
                                         </button>
                                     </div>
@@ -142,24 +142,25 @@
                                     <h3 class="text-lg font-bold mb-4">学習する項目を選択してください</h3>
                                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-4" x-text="selectedCategory + ' > ' + selectedSubCategory"></p>
                                     
-                                    <button @click="alert('学習を開始します：四槓子')" class="w-full text-left p-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition mb-3">
+                                    {{-- ▼▼▼▼▼ ここを全て<a>タグに変更しました ▼▼▼▼▼ --}}
+                                    <a href="{{ route('quiz.start') }}" class="block w-full text-left p-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition mb-3">
                                         <div class="font-semibold">四槓子</div>
-                                    </button>
-                                    <button @click="alert('学習を開始します：大三元')" class="w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition mb-3">
+                                    </a>
+                                    <a href="{{ route('quiz.start') }}" class="block w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition mb-3">
                                         <div class="font-semibold">大三元</div>
-                                    </button>
-                                    <button @click="alert('学習を開始します：国士無双')" class="w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition mb-3">
+                                    </a>
+                                    <a href="{{ route('quiz.start') }}" class="block w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition mb-3">
                                         <div class="font-semibold">国士無双</div>
-                                    </button>
-                                    <button @click="alert('学習を開始します：九蓮宝燈')" class="w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition mb-3">
+                                    </a>
+                                    <a href="{{ route('quiz.start') }}" class="block w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition mb-3">
                                         <div class="font-semibold">九蓮宝燈</div>
-                                    </button>
-                                    <button @click="alert('学習を開始します：緑一色')" class="w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition mb-3">
+                                    </a>
+                                    <a href="{{ route('quiz.start') }}" class="block w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition mb-3">
                                         <div class="font-semibold">緑一色</div>
-                                    </button>
-                                    <button @click="alert('学習を開始します：清老頭')" class="w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition">
+                                    </a>
+                                    <a href="{{ route('quiz.start') }}" class="block w-full text-left p-4 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-800 rounded-lg transition">
                                         <div class="font-semibold">清老頭</div>
-                                    </button>
+                                    </a>
                                     
                                     <button @click="step = 3; selectedSubCategory = ''" class="mt-4 text-sm text-gray-500 hover:underline">
                                         &laquo; 戻る

@@ -1,34 +1,36 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\QuizController; // QuizController���g���錾��ǉ�
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuizController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
+// 基本ルート
+Route::get('/', function () {
+    return view('welcome');
+});
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/test', function () {
+    return 'Sailテスト成功！Laravel動作中！';
+});
 
-// ���O�C����̃_�b�V���{�[�h�i�z�[����ʁj
-Route::get('/dashboard', [HomeController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('dashboard');
-
-// �N�C�Y��ʕ\���p�̐V�������[�g��ǉ�
-// {tile} �̕����ɂ́A���킷��v��ID������܂� (��: /quiz/1)
-Route::get('/quiz/{tile}', [QuizController::class, 'show'])
-    ->middleware(['auth', 'verified'])->name('quiz.show');
-
-
+// 認証が必要なルート
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// クイズルート
+Route::middleware('auth')->prefix('quiz')->name('quiz.')->group(function () {
+    Route::get('/start', [QuizController::class, 'start'])->name('start');
+    Route::post('/answer', [QuizController::class, 'answer'])->name('answer');
+    Route::get('/result', [QuizController::class, 'result'])->name('result');
+    Route::get('/{tile}', [QuizController::class, 'show'])->name('show');
+});
+
+// 認証ルート
 require __DIR__.'/auth.php';
