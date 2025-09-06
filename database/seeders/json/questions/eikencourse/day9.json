@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "交通・移動・乗り物",
+            "options": ["transport", "traffic", "vehicle", "commute"],
+            "answer": "transport"
+        },
+        {
+            "question": "食べ物・食事・料理",
+            "options": ["meal", "dish", "food", "cuisine"],
+            "answer": "food"
+        }
+    ]
+}

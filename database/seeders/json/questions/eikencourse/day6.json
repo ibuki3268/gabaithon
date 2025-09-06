@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "地球・惑星・世界",
+            "options": ["planet", "earth", "globe", "world"],
+            "answer": "earth"
+        },
+        {
+            "question": "計画・予定・スケジュール",
+            "options": ["plan", "schedule", "agenda", "program"],
+            "answer": "plan"
+        }
+    ]
+}

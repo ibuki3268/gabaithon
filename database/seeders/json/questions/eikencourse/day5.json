@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "発明・創造・考案",
+            "options": ["invention", "innovation", "creation", "discovery"],
+            "answer": "invention"
+        },
+        {
+            "question": "法律・規則・ルール",
+            "options": ["law", "rule", "regulation", "ordinance"],
+            "answer": "law"
+        }
+    ]
+}

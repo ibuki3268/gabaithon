@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "喜び・楽しみ・幸せ",
+            "options": ["happiness", "pleasure", "joy", "delight"],
+            "answer": "joy"
+        },
+        {
+            "question": "速度・速さ・スピード",
+            "options": ["pace", "speed", "velocity", "rate"],
+            "answer": "speed"
+        }
+    ]
+}

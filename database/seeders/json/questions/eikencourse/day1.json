@@ -3,12 +3,12 @@
         {
             "question": "理論・学説・説",
             "options": ["assumption", "discipline", "theory", "theology"],
-            "answer": 2
+            "answer": "theory"
         },
         {
             "question": "任務・関税・義務",
             "options": ["custom", "duty", "obligation", "responsibility"],
-            "answer": 1
+            "answer": "duty"
         }
     ]
 }
