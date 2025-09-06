@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            ƒNƒCƒY
+            ã‚¯ã‚¤ã‚º
         </h2>
     </x-slot>
 
@@ -10,10 +10,10 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                    {{-- –â‘è•¶ --}}
+                    {{-- å•é¡Œæ–‡ --}}
                     @php
-                        // $question ‚ÍƒRƒ“ƒgƒ[ƒ‰‚Å”z—ñ‚Æ‚µ‚Ä“n‚³‚ê‚Ä‚¢‚é‘z’è
-                        // ƒtƒH[ƒ‹ƒoƒbƒN: text -> question_text -> question -> content['text']
+                        // $question ã¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ã§é…åˆ—ã¨ã—ã¦æ¸¡ã•ã‚Œã¦ã„ã‚‹æƒ³å®š
+                        // ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯: text -> question_text -> question -> content['text']
                         $qText = null;
                         $options = [];
 
@@ -28,40 +28,34 @@
                                 $qText = $question['content']['text'];
                             }
 
-                            // ‘I‘ğˆ‚ÌŒó•âioptions ƒJƒ‰ƒ€ or content['options']j
+                            // é¸æŠè‚¢ã®å€™è£œï¼ˆoptions ã‚«ãƒ©ãƒ  or content['options']ï¼‰
                             if (array_key_exists('options', $question)) {
                                 $options = $question['options'];
                             } elseif (array_key_exists('content', $question) && is_array($question['content']) && array_key_exists('options', $question['content'])) {
                                 $options = $question['content']['options'];
                             }
-                            // options ‚ª JSON •¶š—ñ‚âƒJƒ“ƒ}‹æØ‚è•¶š—ñ‚Ìê‡‚É”z—ñ‚Ö•ÏŠ·
+                            // options ãŒ JSON æ–‡å­—åˆ—ã‚„ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šæ–‡å­—åˆ—ã®å ´åˆã«é…åˆ—ã¸å¤‰æ›
                             if (is_string($options)) {
                                 $decoded = json_decode($options, true);
                                 if (is_array($decoded)) {
                                     $options = $decoded;
                                 } else {
-                                    // ƒJƒ“ƒ}‹æØ‚è‚ÅŠi”[‚³‚ê‚Ä‚¢‚éƒP[ƒX‚ğ‘z’è
+                                    // ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã§æ ¼ç´ã•ã‚Œã¦ã„ã‚‹ã‚±ãƒ¼ã‚¹ã‚’æƒ³å®š
                                     $options = array_map('trim', explode(',', $options));
                                 }
                             }
                         }
                     @endphp
 
-                    <h3 class="text-2xl font-bold mb-6">{{ $qText ?? '–â‘è•¶‚ª‚ ‚è‚Ü‚¹‚ñB' }}</h3>
+                    <h3 class="text-2xl font-bold mb-6">{{ $qText ?? 'å•é¡Œæ–‡ãŒã‚ã‚Šã¾ã›ã‚“ã€‚' }}</h3>
 
-                    {{-- ƒfƒoƒbƒO: –â‘èƒIƒuƒWƒFƒNƒg‚Ì¶ƒf[ƒ^‚ğ•\¦iAPP_DEBUG ‚Ì‚İj --}}
-                    @if(config('app.debug'))
-                        <div class="mt-4 p-3 bg-gray-100 text-sm rounded">
-                            <div class="font-semibold mb-2">Debug: question raw</div>
-                            <pre class="whitespace-pre-wrap">{!! nl2br(e(json_encode($question, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE))) !!}</pre>
-                        </div>
-                    @endif
+                    {{-- ãƒ‡ãƒãƒƒã‚°è¡¨ç¤ºã¯å‰Šé™¤ã—ã¾ã—ãŸ --}}
 
-                    {{-- ‰ñ“š‚ğ‘—M‚·‚éƒtƒH[ƒ€ --}}
+                    {{-- å›ç­”ã‚’é€ä¿¡ã™ã‚‹ãƒ•ã‚©ãƒ¼ãƒ  --}}
                     <form action="{{ route('quiz.answer') }}" method="POST" class="space-y-4">
                         @csrf
 
-                        {{-- ‘I‘ğˆ‚ğƒ‹[ƒv‚Åƒ{ƒ^ƒ“‚Æ‚µ‚Ä•\¦ --}}
+                        {{-- é¸æŠè‚¢ã‚’ãƒ«ãƒ¼ãƒ—ã§ãƒœã‚¿ãƒ³ã¨ã—ã¦è¡¨ç¤º --}}
                         @if(is_array($options) && count($options) > 0)
                             @foreach ($options as $option)
                                 <button type="submit" name="selected" value="{{ $option }}"
@@ -70,7 +64,7 @@
                                 </button>
                             @endforeach
                         @else
-                             <p>‘I‘ğˆ‚ª‚ ‚è‚Ü‚¹‚ñB</p>
+                             <p>é¸æŠè‚¢ãŒã‚ã‚Šã¾ã›ã‚“ã€‚</p>
                         @endif
                     </form>
 

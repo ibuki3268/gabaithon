@@ -87,23 +87,30 @@ class QuizController extends Controller
      */
     public function answer(Request $request)
     {
-        $questions = $request->session()->get('questions');
+        $questions = $request->session()->get('questions', []);
         $index = $request->session()->get('quiz_index', 0);
         $score = $request->session()->get('score', []);
 
-        if (!$questions) {
-            return redirect()->route('quiz.start');
+        // 問題リストが空、またはインデックスが範囲外なら結果画面へ
+        if (empty($questions)) {
+            return redirect()->route('quiz.result');
+        }
+
+        if (!isset($questions[$index])) {
+            // 何らかの理由で現在のインデックスが存在しない（削除等）
+            return redirect()->route('quiz.result');
         }
 
         $selectedAnswer = $request->input('selected');
-        $correctAnswer = $questions[$index]['answer'];
+        $correctAnswer = $questions[$index]['answer'] ?? null;
         $score[] = ($selectedAnswer === $correctAnswer);
 
         $index++;
         $request->session()->put('quiz_index', $index);
         $request->session()->put('score', $score);
 
-        if ($index >= count($questions)) {
+        // 残り問題が無ければ結果画面へ
+        if ($index >= count($questions) || count($questions) === 0) {
             return redirect()->route('quiz.result');
         }
 
