@@ -11,19 +11,9 @@ class DiscardedTileController extends Controller
      */
     public function index()
     {
-        // テーブルが空だったので仮データ置いてます
-        $discardedTiles = [
-            [
-                'id' => 1,
-                'course_id' => 'あ',
-                'tile_id' => 'あ',
-                'created_at' => 'あ',
-                'updated_at' => 'あ'
-            ],
-            
-        ];
-
-        return view('discarded-tiles', compact('discardedTiles'));
+    // sutehaiテーブルから全件取得
+    $discardedTiles = \DB::table('sutehai')->get();
+    return view('discarded-tiles', compact('discardedTiles'));
     }
 
     /**

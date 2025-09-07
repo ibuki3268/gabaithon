@@ -13,7 +13,7 @@
 
                     {{-- 左側：ジャンル選択 --}}
                     <div style="width: 500px; min-width: 500px;">
-                        <div class="bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg shadow-lg h-96 w-[250px] min-w-[250px]">
+                        <div class="bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg shadow-lg h-96">
                             <div class="p-4">
                                 <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">ジャンル</h3>
                                 <div class="space-y-2">
