@@ -5,25 +5,43 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Question extends Model
 {
     use HasFactory;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'questions';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
+    // Seederでの利用に合わせて、一括代入可能な属性を更新
     protected $fillable = [
-        'tile_id',
-        'question_text',
+        'day',
+        'course_id',
+        'difficulty_id',
+        'question',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'question' => 'array', // 'question'カラムをJSONから配列へ自動変換
+    ];
 
     /**
-     * ?ｿｽ?ｿｽ?ｿｽﾌ厄ｿｽ閧ｪ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽv?ｿｽiTile?ｿｽj?ｿｽ?ｿｽ?ｿｽ謫ｾ?ｿｽ?ｿｽ?ｿｽ?ｿｽ (?ｿｽ?ｿｽ?ｿｽ?ｿｽ1)
+     * この問題が属する牌（Tile）を取得する (多対1)
+     * 注意: このリレーションを機能させるには 'questions' テーブルに 'tile_id' カラムが必要です。
      */
     public function tile(): BelongsTo
     {
@@ -31,22 +49,19 @@ class Question extends Model
     }
 
     /**
-     * ?ｿｽ?ｿｽ?ｿｽﾌ厄ｿｽ閧ｪ?ｿｽ?ｿｽ?ｿｽﾂ選?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽiChoices?ｿｽj?ｿｽ?ｿｽ?ｿｽ謫ｾ?ｿｽ?ｿｽ?ｿｽ?ｿｽ (1?ｿｽﾎ托ｿｽ)
+     * 一つの難易度に属する
      */
-
-
-    protected $table = 'questions'; // 繝?繝ｼ繝悶Ν蜷?
-    protected $casts = [
-        'content' => 'array', // JSON繧ｫ繝ｩ繝?繧定?ｪ蜍輔〒驟榊?励↓螟画鋤
-    ];
-
-    public function difficulty()//荳縺､縺ｮ髮｣譏灘ｺｦ縺ｫ螻槭☆繧?
+    public function difficulty(): BelongsTo
     {
         return $this->belongsTo(Difficulty::class);
     }
-    // 髢捺磁逧?縺ｫ繧ｳ繝ｼ繧ｹ繧貞叙蠕?
+
+    /**
+     * 関連的にコースを取得
+     */
     public function course()
     {
+        // difficultyリレーションを経由してCourseモデルを取得します
         return $this->difficulty->course;
     }
 }

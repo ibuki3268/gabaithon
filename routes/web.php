@@ -4,16 +4,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
 
-// åŸºæœ¬ãƒ«ãƒ¼ãƒˆ
+// Šî–{ƒ‹[ƒg
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/test', function () {
-    return 'Sailãƒ†ã‚¹ãƒˆæˆåŠŸï¼Laravelå‹•ä½œä¸­ï¼';
+    return 'SailƒeƒXƒg¬Œ÷ILaravel“®ì’†I';
 });
 
-// èªè¨¼ãŒå¿…è¦ãªãƒ«ãƒ¼ãƒˆ
+// ”FØ‚ª•K—v‚Èƒ‹[ƒg
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// ã‚¯ã‚¤ã‚ºãƒ«ãƒ¼ãƒˆ
+// ƒNƒCƒYƒ‹[ƒg
 Route::middleware('auth')->prefix('quiz')->name('quiz.')->group(function () {
     Route::get('/start', [QuizController::class, 'start'])->name('start');
     Route::post('/answer', [QuizController::class, 'answer'])->name('answer');
@@ -32,5 +32,5 @@ Route::middleware('auth')->prefix('quiz')->name('quiz.')->group(function () {
     Route::get('/{tile}', [QuizController::class, 'show'])->name('show');
 });
 
-// èªè¨¼ãƒ«ãƒ¼ãƒˆ
+// ”FØƒ‹[ƒg
 require __DIR__.'/auth.php';

@@ -16,6 +16,16 @@
                         あなたのスコアは... <span class="text-4xl font-black text-blue-500">{{ $correctCount }} / {{ $total }}</span> 問正解です！
                     </p>
 
+                    {{-- 合否表示（80%以上で合格） --}}
+                    <div class="text-center mb-6">
+                        @if(isset($pass) && $pass)
+                            <div class="inline-block px-4 py-2 bg-green-500 text-white font-bold rounded-lg">合格 🎉</div>
+                        @else
+                            <div class="inline-block px-4 py-2 bg-red-500 text-white font-bold rounded-lg">不合格</div>
+                        @endif
+                        <div class="mt-2 text-sm text-gray-600">達成率: {{ isset($percentage) ? number_format($percentage, 1) : 0 }}%</div>
+                    </div>
+
                     {{-- 各問題の結果を詳細表示 --}}
                     <div class="space-y-2 mb-8">
                         @foreach($questions as $index => $question)
@@ -64,11 +74,16 @@
                         @endforeach
                     </div>
 
-                    {{-- もう一度挑戦するボタン --}}
-                    <div class="text-center">
+                    {{-- もう一度挑戦するボタン と ホームに戻るボタン --}}
+                    <div class="text-center space-x-4">
                         <a href="{{ route('quiz.start') }}"
                            class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
                             もう一度挑戦する
+                        </a>
+
+                        <a href="{{ route('dashboard') }}"
+                           class="inline-block bg-gray-500 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+                            ホーム画面に戻る
                         </a>
                     </div>
 
