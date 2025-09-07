@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sutehai', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+            $table->foreignId('question_id')->constrained('courses')->onDelete('cascade');
             $table->foreignId('tile_id')->constrained('tiles')->onDelete('cascade');            
             $table->timestamps();
         });

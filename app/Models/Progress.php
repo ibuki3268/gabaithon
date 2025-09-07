@@ -9,23 +9,25 @@ class Progress extends Model
 {
     use HasFactory;
 
-    // fillable に progresses と status を追加
+
     protected $fillable = [
         'user_id',
         'day',
         'course_id',
         'difficulty_id',
-        'progresses',    // ← 追加
+        'progresses',    
+        'newstudy',
         'yaku_id',
-        'status',        // ← 追加
+        'status',       
     ];
 
-    // JSON を配列として扱うためのキャスト（おすすめ）
+
     protected $casts = [
         'progresses' => 'array',
+    'newstudy' => 'boolean',
     ];
 
-    // リレーション
+ 
     public function user()
     {
         return $this->belongsTo(User::class);
