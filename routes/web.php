@@ -3,11 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\HomeController;
 
 // 基本ルート
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/test', function () {
     return 'Sailテスト成功！Laravel動作中！';
@@ -15,10 +16,10 @@ Route::get('/test', function () {
 
 // 認証が必要なルート
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-    
+    Route::get('/', [HomeController::class, 'firstshow'])->name('dashboard');
+    Route::post('/selectcourse', [HomeController::class, 'selectcourse'])->name('selectcourse');
+    Route::post('/selectdifficulty', [HomeController::class, 'selectdifficulty'])->name('selectdifficulty');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
