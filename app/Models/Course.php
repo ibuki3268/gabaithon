@@ -19,4 +19,11 @@ class Course extends Model
     {
         return $this->hasManyThrough(Question::class, Difficulty::class);
     }
+
+    protected $fillable = ['name', 'description', 'category'];
+    
+    public function progress()
+    {
+        return $this->hasMany(Progress::class);
+    }
 }
