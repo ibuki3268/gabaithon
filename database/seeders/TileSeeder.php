@@ -2,16 +2,23 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB; // この行を追加
+use Illuminate\Support\Facades\DB;
 use App\Models\Tile;
 
 class TileSeeder extends Seeder
 {
     public function run(): void
     {
-        Tile::truncate();//これでテーブルをいったん空にする
+        // 外部キー制約を無効化
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        // テーブルを空にする
+        DB::table('tiles')->truncate();
+
+        // 外部キー制約を有効化
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         $tiles = [
             ['type' => 'm', 'num' => 1 , 'name' => '一萬', 'image_path' => 'man1.png'],
             ['type' => 'm', 'num' => 2 , 'name' => '二萬', 'image_path' => 'man2.png'],
