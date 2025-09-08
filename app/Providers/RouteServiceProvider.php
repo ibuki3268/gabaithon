@@ -36,7 +36,6 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
 
-            // Web.phpでコンフリ起こしたくないので、捨て牌一覧のルートファイルを作成
             Route::middleware('web')
                 ->group(base_path('routes/discarded-tiles.php'));
         });
