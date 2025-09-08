@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['progress_id']);
-            $table->dropColumn('progress_id');
+        Schema::create('choices', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('question_id')->constrained('questions')->onDelete('cascade');
+            $table->text('text');
+            $table->boolean('is_correct');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('progress_id')->nullable()->constrained('progress')->onDelete('set null');
-        });
+        Schema::dropIfExists('choices');
     }
 };
