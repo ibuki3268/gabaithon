@@ -18,7 +18,6 @@
                     <div style="width: 500px; min-width: 500px;">
                         <div class="bg-white dark:bg-gray-800 border-2 border-green-500 rounded-lg shadow-lg h-96">
                             <div class="h-full overflow-y-auto p-4">
-                                <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200 sticky top-0 bg-white dark:bg-gray-800 pb-2">フレンド機能</h3>
                                 <div class="space-y-2">
                                     {{-- フレンド一覧タブ --}}
                                     <button @click="selectedTab = 'friends'" 
