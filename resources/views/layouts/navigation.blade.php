@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('gacha')" :active="request()->routeIs('gacha')">
                         {{ __('ガチャ') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('friends')" :active="request()->routeIs('friends')">
+                        {{ __('フレンド') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -81,6 +84,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('gacha')" :active="request()->routeIs('gacha')">
                 {{ __('ガチャ') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('friends')" :active="request()->routeIs('friends')">
+                {{ __('フレンド') }}
             </x-responsive-nav-link>
         </div>
 

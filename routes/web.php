@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GachaController;
+use App\Http\Controllers\FriendController;
 
 
 Route::get('/test', function () {
@@ -16,6 +17,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'firstshow'])->name('dashboard');
     Route::post('/selectcourse', [HomeController::class, 'selectcourse'])->name('selectcourse');
     Route::post('/selectdifficulty', [HomeController::class, 'selectdifficulty'])->name('selectdifficulty');
+    Route::post('/selectyaku', [HomeController::class, 'selectyaku'])->name('selectyaku');
+    Route::post('/selecthai', [HomeController::class, 'selecthai'])->name('selecthai');
   
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -33,14 +36,30 @@ Route::middleware('auth')->prefix('quiz')->name('quiz.')->group(function () {
 
 // ガチャルート
 Route::middleware('auth')->group(function () {
-    // ガチャ画面表示
     Route::get('/gacha', [GachaController::class, 'index'])->name('gacha');
-    
-    // ガチャ実行
     Route::post('/gacha/draw', [GachaController::class, 'draw'])->name('gacha.draw');
-    
-    // ガチャ結果表示
     Route::get('/gacha/result', [GachaController::class, 'result'])->name('gacha.result');
+});
+
+// フレンドルート
+Route::middleware('auth')->group(function () {
+    // フレンド一覧画面
+    Route::get('/friends', [FriendController::class, 'index'])->name('friends');
+    
+    // フレンド検索
+    Route::get('/friends/search', [FriendController::class, 'search'])->name('friends.search');
+    
+    // フレンド申請送信
+    Route::post('/friends/request/{user}', [FriendController::class, 'sendRequest'])->name('friends.request');
+    
+    // フレンド申請承認
+    Route::post('/friends/accept/{request}', [FriendController::class, 'acceptRequest'])->name('friends.accept');
+    
+    // フレンド申請拒否
+    Route::post('/friends/reject/{request}', [FriendController::class, 'rejectRequest'])->name('friends.reject');
+    
+    // フレンド削除
+    Route::delete('/friends/{friend}', [FriendController::class, 'removeFriend'])->name('friends.remove');
 });
 
 // 認証ルート
