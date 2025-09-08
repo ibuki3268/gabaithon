@@ -26,7 +26,7 @@
                                             class="w-full text-left p-3 rounded-lg transition font-medium">
                                         <div class="flex items-center justify-between">
                                             <span>フレンド一覧</span>
-                                            <span class="text-sm bg-green-600 text-white px-2 py-1 rounded-full">{{ count($friends) }}</span>
+                                            <span class="text-sm bg-red-500 text-white px-2 py-1 rounded-full">{{ count($friends) }}</span>
                                         </div>
                                     </button>
                                     
@@ -56,13 +56,6 @@
                     {{-- 右側：選択したタブのコンテンツ --}}
                     <div class="flex-1 bg-white dark:bg-gray-800 border-2 border-green-500 rounded-lg shadow-lg h-96">
                         <div class="h-full overflow-y-auto p-6 pr-8">
-
-                            {{-- パンくずリスト --}}
-                            <div class="mb-4 text-sm text-gray-500 sticky top-0 bg-white dark:bg-gray-800 pb-2">
-                                <span x-show="selectedTab === 'friends'">フレンド一覧</span>
-                                <span x-show="selectedTab === 'requests'">受信申請</span>
-                                <span x-show="selectedTab === 'search'">フレンド検索</span>
-                            </div>
 
                             {{-- フレンド一覧 --}}
                             <div x-show="selectedTab === 'friends'">
@@ -132,13 +125,13 @@
                                             <div class="space-x-2">
                                                 <form action="{{ route('friends.accept', $request['id']) }}" method="POST" class="inline">
                                                     @csrf
-                                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition">
+                                                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition">
                                                         承認
                                                     </button>
                                                 </form>
                                                 <form action="{{ route('friends.reject', $request['id']) }}" method="POST" class="inline">
                                                     @csrf
-                                                    <button type="submit" class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm transition">
+                                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition">
                                                         拒否
                                                     </button>
                                                 </form>
@@ -164,7 +157,7 @@
                                            class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none">
                                 </div>
                                 <button @click="alert('検索機能は開発中です')" 
-                                        class="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition mb-4">
+                                        class="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition mb-4">
                                     検索
                                 </button>
                                 

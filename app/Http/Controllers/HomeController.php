@@ -279,4 +279,43 @@ class HomeController extends Controller
             ], 500);
         }
     }
+
+
+    public function newmakedata(Request $request)
+    {
+        $userId = $request->input('user_id');
+
+        $selectedYakuId = session()->get('selectedYakuId');
+        $yakuStructure = Yaku::where('id', $selectedYakuId)->value('structure');
+
+        $structureData = [];
+        if (is_string($yakuStructure)) {
+            $structureData = json_decode($yakuStructure, true);
+        } else if (is_array($yakuStructure)) {
+            $structureData = $yakuStructure;
+        }
+
+        if (!$structureData) {
+            $structureData = [];
+        }
+
+        // 新しい JSON 配列作成
+        $hai = [];
+        foreach ($numbers as $num) {
+            $numArray[] = [
+                'value' => $num,
+                'score' => null
+            ];
+        }
+
+        // DB に保存
+        UserLearning::create([
+            'user_id' => $userId,
+            'data' => $numArray
+        ]);
+
+        // return は書かない
+    }
+
+
 }

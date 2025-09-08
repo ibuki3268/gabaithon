@@ -214,8 +214,6 @@ function selectyaku(selectdifficulty) {
 }
 
 //牌選択画面に行くとき用
-//牌選択画面に行くとき用
-//牌選択画面に行くとき用
 function selecthai(selectyakuId) {
     console.log("selecthai called with yakuId:", selectyakuId);
 
@@ -307,7 +305,7 @@ function selecthai(selectyakuId) {
                             <!-- 上段 -->
                             <div class="flex justify-center space-x-1">
                                 <template x-for="(tile, index) in Haisdata.slice(0, 7)" :key="tile.id + '_' + index + '_top'">
-                                    <button @click="startGame(tile.id)"
+                                    <button @click="startGame(tile.id,selectedYakuId,selectedCourseId,selectdifficultyId)"
                                             class="flex-1 aspect-[2/3] bg-white border border-gray-300 rounded hover:border-orange-500 transition-colors overflow-hidden shadow-sm hover:shadow-md cursor-pointer">
                                         <img x-show="tile.image_path" 
                                             :src="'/assets/tiles/' + tile.image_path" 
@@ -322,7 +320,7 @@ function selecthai(selectyakuId) {
                             <!-- 下段 -->
                             <div x-show="Haisdata.length > 7" class="flex justify-center space-x-1 mt-2">
                                 <template x-for="(tile, index) in Haisdata.slice(7, 14)" :key="tile.id + '_' + index + '_bottom'">
-                                    <button @click="startGame(tile.id)"
+                                    <button @click="startGame(tile.id,selectedYakuId,selectedCourseId,selectdifficultyId)"
                                             class="flex-1 aspect-[2/3] bg-white border border-gray-300 rounded hover:border-orange-500 transition-colors overflow-hidden shadow-sm hover:shadow-md cursor-pointer">
                                         <img x-show="tile.image_path" 
                                             :src="'/assets/tiles/' + tile.image_path" 
