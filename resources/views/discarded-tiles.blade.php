@@ -18,22 +18,22 @@
                                 <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">ジャンル</h3>
                                 <div class="space-y-2">
                                 {{-- ジャンルタブ --}}
-                                <button @click="selectedGenre = '英検'" 
+                                <button @click="selectedGenre = '英検'; showDiscardedTiles = false; selectedCourse = ''"
                                         :class="selectedGenre === '英検' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-300'"
                                         class="w-full text-left p-3 rounded-lg transition font-medium">
                                     英検
                                 </button>
-                                <button @click="selectedGenre = '雀士'" 
+                                <button @click="selectedGenre = '雀士'; showDiscardedTiles = false; selectedCourse = ''"
                                         :class="selectedGenre === '雀士' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-300'"
                                         class="w-full text-left p-3 rounded-lg transition font-medium">
                                     雀士
                                 </button>
-                                <button @click="selectedGenre = 'エンジニア'" 
+                                <button @click="selectedGenre = 'エンジニア'; showDiscardedTiles = false; selectedCourse = ''"
                                         :class="selectedGenre === 'エンジニア' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-300'"
                                         class="w-full text-left p-3 rounded-lg transition font-medium">
                                     エンジニア
                                 </button>
-                                <button @click="selectedGenre = '社会'" 
+                                <button @click="selectedGenre = '社会'; showDiscardedTiles = false; selectedCourse = ''"
                                         :class="selectedGenre === '社会' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'"
                                         class="w-full text-left p-3 rounded-lg transition font-medium">
                                     社会
@@ -128,6 +128,10 @@
 
                                 {{-- 捨て牌一覧 --}}
                                 <div x-show="showDiscardedTiles">
+                                    <form method="GET" action="{{ route('discarded.tiles') }}">
+                                        <input type="hidden" name="genre" :value="selectedGenre">
+                                        <input type="hidden" name="course" :value="selectedCourse">
+                                    </form>
                                     <div class="flex items-center justify-between mb-4 min-h-full">
                                         <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">捨て牌一覧</h3>
                                         <button @click="showDiscardedTiles = false; selectedCourse = ''" 
@@ -135,9 +139,7 @@
                                             &laquo; 学習内容に戻る
                                         </button>
                                     </div>
-                                    
                                     <div class="text-sm text-gray-600 mb-4" x-text="currentCourseName + ' で獲得できなかった牌を再挑戦できます'"></div>
-
                                     {{-- 捨て牌グリッド --}}
                                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                         @foreach($discardedTiles as $tile)
@@ -145,22 +147,18 @@
                                             <div class="text-center">
                                                 {{-- 牌の画像（将来的に実装） --}}
                                                 <div class="w-16 h-20 bg-gray-200 rounded mx-auto mb-2 flex items-center justify-center">
-                                                    <span class="text-xs text-gray-500">牌{{ $tile['tile_id'] }}</span>
+                                                    <span class="text-xs text-gray-500">牌{{ $tile->tile_id }}</span>
                                                 </div>
-                                                
                                                 {{-- 牌のID --}}
-                                                <div class="font-semibold text-sm mb-1">牌ID: {{ $tile['tile_id'] }}</div>
-                                                
-                                                {{-- コースID --}}
-                                                <div class="text-xs text-gray-600 mb-2">コース: {{ $tile['course_id'] }}</div>
-                                                
+                                                <div class="font-semibold text-sm mb-1">牌ID: {{ $tile->tile_id }}</div>
+                                                {{-- クエスチョンID --}}
+                                                <div class="text-xs text-gray-600 mb-2">コース: {{ $tile->question_id }}</div>
                                                 {{-- 作成日時 --}}
                                                 <div class="text-xs text-red-600 mb-3">
-                                                    {{ $tile['created_at'] }}
+                                                    {{ $tile->created_at }}
                                                 </div>
-                                                
                                                 {{-- 再挑戦ボタン --}}
-                                                <form action="{{ route('discarded.retry', $tile['id']) }}" method="POST">
+                                                <form action="{{ route('discarded.retry', $tile->id) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" 
                                                             class="w-full bg-red-500 hover:bg-red-600 text-white text-xs py-2 px-3 rounded transition">
@@ -171,7 +169,6 @@
                                         </div>
                                         @endforeach
                                     </div>
-
                                     {{-- 捨て牌がない場合のメッセージ --}}
                                     @if(count($discardedTiles) == 0)
                                     <div class="text-center py-8">

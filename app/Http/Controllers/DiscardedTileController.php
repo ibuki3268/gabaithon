@@ -11,9 +11,18 @@ class DiscardedTileController extends Controller
      */
     public function index()
     {
-    // sutehaiテーブルから全件取得
-    $discardedTiles = \DB::table('sutehai')->get();
-    return view('discarded-tiles', compact('discardedTiles'));
+        // ジャンル・コースで絞り込み
+        $genre = request('genre');
+        $course = request('course');
+        $query = \DB::table('sutehai');
+        if ($genre) {
+            $query->where('genre', $genre);
+        }
+        if ($course) {
+            $query->where('question_id', $course);
+        }
+        $discardedTiles = $query->get();
+        return view('discarded-tiles', compact('discardedTiles'));
     }
 
     /**
