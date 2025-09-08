@@ -62,27 +62,37 @@ Route::middleware('auth')->group(function () {
     
     // フレンド削除
     Route::delete('/friends/{friend}', [FriendController::class, 'removeFriend'])->name('friends.remove');
-
-
-
-// 左上ロゴからバトル画面に遷移
-Route::get('/vs/battle', [GameController::class, 'battle'])->name('battle');
-
-// index（学習モードや牌確認用）
-Route::get('/game', [GameController::class, 'index'])->name('game');
-// 対戦モード
-Route::get('/vs/battle', [VsController::class, 'battle'])->name('vs.battle');
-Route::post('/vs/draw/{player}', [VsController::class, 'draw'])->name('vs.draw');
-
-Route::get('/vs/reset', [\App\Http\Controllers\VsController::class, 'reset'])->name('vs.reset');
-
-
-
-
-
 });
 
-
+// ゲームルート（認証必要）
+Route::middleware('auth')->group(function () {
+    // 学習モード
+    Route::get('/game', [GameController::class, 'index'])->name('game');
+    
+    // 対戦モード
+    Route::prefix('vs')->name('vs.')->group(function () {
+        // 対戦画面表示
+        Route::get('/battle', [VsController::class, 'battle'])->name('battle');
+        
+        // ツモして捨てるアクション
+        Route::post('/draw-and-discard/{tileIndex}', [VsController::class, 'drawAndDiscard'])
+            ->name('drawAndDiscard');
+        
+        // ロン判定
+        Route::post('/check-ron/{discardingPlayer}/{tileIndex}', [VsController::class, 'checkRon'])
+            ->name('checkRon');
+            
+        // リーチ宣言
+        Route::post('/declare-riichi/{player}', [VsController::class, 'declareRiichi'])
+            ->name('declareRiichi');
+        
+        // ゲームリセット
+        Route::get('/reset', [VsController::class, 'reset'])->name('reset');
+        
+        // ゲーム統計（API）
+        Route::get('/stats', [VsController::class, 'stats'])->name('stats');
+    });
+});
 
 // 認証ルート
 require __DIR__.'/auth.php';
