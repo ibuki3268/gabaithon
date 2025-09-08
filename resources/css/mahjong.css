@@ -1,0 +1,61 @@
+/* body©‘Ì‚É”wŒi */
+body {
+    background-color: #006400 !important; /* –ƒ‘ì‚Ì”Z‚¢—Î */
+    background-image: 
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05) 0%, transparent 70%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05) 0%, transparent 70%);
+    background-size: 100px 100px !important;
+    background-repeat: repeat !important;
+    min-height: 100vh !important;
+    font-family: "Noto Sans JP", sans-serif;
+}
+
+/* Tailwind ‚ªã‘‚«‚µ‚Ä‚¢‚é”wŒi‚ğ“§–¾‚É‚·‚é */
+.min-h-screen {
+    background-color: transparent !important;
+}
+
+/* ================================
+   ŠwKƒ‚[ƒh˜g
+   ================================ */
+#change {
+    background: rgba(255, 255, 255, 0.92);
+    border: 4px solid #228b22; /* ‘ì‚Á‚Û‚¢—Î‚Ì˜g */
+    border-radius: 12px;
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.4);
+    padding: 1rem;
+}
+
+/* ================================
+   ƒ{ƒ^ƒ“‚ğ”v•—‚É
+   ================================ */
+#change button {
+    border: 2px solid #ddd;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    transition: transform 0.1s ease-in-out;
+}
+#change button:hover {
+    transform: translateY(-2px);
+}
+
+/* V‹KŠwKƒ{ƒ^ƒ“iÔ”v•—j */
+#change button.bg-orange-500 {
+    background: linear-gradient(145deg, #ff6b6b, #d64545);
+    border-color: #a60000;
+    color: white;
+}
+
+/* Šù‘¶ŠwKƒ{ƒ^ƒ“iÂ”v•—j */
+#change button.bg-blue-500 {
+    background: linear-gradient(145deg, #4d9efc, #1d4ed8);
+    border-color: #0033a0;
+    color: white;
+}
+
+/* –³Œøƒ{ƒ^ƒ“iŠDF”v•—j */
+#change button.bg-gray-300 {
+    background: #ddd;
+    border-color: #aaa;
+    color: #666;
+    cursor: not-allowed;
+}
