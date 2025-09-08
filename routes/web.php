@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\GachaController;
 
 
 Route::get('/test', function () {
@@ -28,6 +29,18 @@ Route::middleware('auth')->prefix('quiz')->name('quiz.')->group(function () {
     Route::post('/answer', [QuizController::class, 'answer'])->name('answer');
     Route::get('/result', [QuizController::class, 'result'])->name('result');
     Route::get('/{tile}', [QuizController::class, 'show'])->name('show');
+});
+
+// ガチャルート
+Route::middleware('auth')->group(function () {
+    // ガチャ画面表示
+    Route::get('/gacha', [GachaController::class, 'index'])->name('gacha');
+    
+    // ガチャ実行
+    Route::post('/gacha/draw', [GachaController::class, 'draw'])->name('gacha.draw');
+    
+    // ガチャ結果表示
+    Route::get('/gacha/result', [GachaController::class, 'result'])->name('gacha.result');
 });
 
 // 認証ルート
