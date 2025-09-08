@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/selectdifficulty', [HomeController::class, 'selectdifficulty'])->name('selectdifficulty');
     Route::post('/selectyaku', [HomeController::class, 'selectyaku'])->name('selectyaku');
     Route::post('/selecthai', [HomeController::class, 'selecthai'])->name('selecthai');
+    Route::post('/newmakedata', [HomeController::class, 'newmakedata'])->name('newmakedata');
   
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
