@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "議論・討論・話し合い",
+            "options": ["discussion", "debate", "conversation", "argument"],
+            "answer": "debate"
+        },
+        {
+            "question": "動物・生物・生き物",
+            "options": ["creature", "animal", "organism", "beast"],
+            "answer": "animal"
+        }
+    ]
+}

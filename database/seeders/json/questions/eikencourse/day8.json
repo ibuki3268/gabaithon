@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "太陽・光・明るさ",
+            "options": ["sun", "light", "brightness", "shine"],
+            "answer": "sun"
+        },
+        {
+            "question": "感情・気持ち・心",
+            "options": ["emotion", "feeling", "mind", "soul"],
+            "answer": "emotion"
+        }
+    ]
+}

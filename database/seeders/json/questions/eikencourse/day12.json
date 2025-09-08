@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "仕事・職業・任務",
+            "options": ["job", "work", "occupation", "task"],
+            "answer": "job"
+        },
+        {
+            "question": "音楽・メロディ・曲",
+            "options": ["song", "music", "melody", "tune"],
+            "answer": "music"
+        }
+    ]
+}

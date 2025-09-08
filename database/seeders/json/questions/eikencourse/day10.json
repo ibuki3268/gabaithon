@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "音・声・響き",
+            "options": ["sound", "voice", "tone", "noise"],
+            "answer": "sound"
+        },
+        {
+            "question": "心臓・循環・血液",
+            "options": ["heart", "blood", "circulation", "pulse"],
+            "answer": "heart"
+        }
+    ]
+}

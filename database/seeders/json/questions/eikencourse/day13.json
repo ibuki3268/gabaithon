@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "科学・研究・実験",
+            "options": ["experiment", "research", "science", "study"],
+            "answer": "science"
+        },
+        {
+            "question": "植物・樹木・花",
+            "options": ["plant", "tree", "flower", "bush"],
+            "answer": "plant"
+        }
+    ]
+}

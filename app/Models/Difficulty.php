@@ -9,7 +9,7 @@ class Difficulty extends Model
 {
     use HasFactory;
 
-    protected $table = 'questions'; // テーブル名
+    protected $table = 'difficulties'; // テーブル名
     protected $casts = [
         'content' => 'array', // JSONカラムを自動で配列に変換
     ];

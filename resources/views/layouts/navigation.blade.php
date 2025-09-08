@@ -15,6 +15,15 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('discarded.tiles')" :active="request()->routeIs('discarded.tiles')">
+                        {{ __('捨て牌一覧') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('gacha')" :active="request()->routeIs('gacha')">
+                        {{ __('ガチャ') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('friends')" :active="request()->routeIs('friends')">
+                        {{ __('フレンド') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -69,6 +78,15 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('discarded.tiles')" :active="request()->routeIs('discarded.tiles')">
+                {{ __('捨て牌一覧') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('gacha')" :active="request()->routeIs('gacha')">
+                {{ __('ガチャ') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('friends')" :active="request()->routeIs('friends')">
+                {{ __('フレンド') }}
             </x-responsive-nav-link>
         </div>
 

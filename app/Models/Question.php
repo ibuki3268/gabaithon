@@ -5,25 +5,43 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Question extends Model
 {
     use HasFactory;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'questions';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
+    // Seeder‚Å‚Ì—˜—p‚É‡‚í‚¹‚ÄAˆêŠ‡‘ã“ü‰Â”\‚È‘®«‚ðXV
     protected $fillable = [
-        'tile_id',
-        'question_text',
+        'day',
+        'course_id',
+        'difficulty_id',
+        'question',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'question' => 'array', // 'question'ƒJƒ‰ƒ€‚ðJSON‚©‚ç”z—ñ‚ÖŽ©“®•ÏŠ·
+    ];
 
     /**
-     * ï¿½ï¿½ï¿½Ì–ï¿½è‚ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iTileï¿½jï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½1)
+     * ‚±‚Ì–â‘è‚ª‘®‚·‚é”viTilej‚ðŽæ“¾‚·‚é (‘½‘Î1)
+     * ’ˆÓ: ‚±‚ÌƒŠƒŒ[ƒVƒ‡ƒ“‚ð‹@”\‚³‚¹‚é‚É‚Í 'questions' ƒe[ƒuƒ‹‚É 'tile_id' ƒJƒ‰ƒ€‚ª•K—v‚Å‚·B
      */
     public function tile(): BelongsTo
     {
@@ -31,22 +49,19 @@ class Question extends Model
     }
 
     /**
-     * ï¿½ï¿½ï¿½Ì–ï¿½è‚ªï¿½ï¿½ï¿½Â‘Iï¿½ï¿½ï¿½ï¿½ï¿½iChoicesï¿½jï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ (1ï¿½Î‘ï¿½)
+     * ˆê‚Â‚Ì“ïˆÕ“x‚É‘®‚·‚é
      */
-
-
-    protected $table = 'questions'; // ãƒ†ãƒ¼ãƒ–ãƒ«å
-    protected $casts = [
-        'content' => 'array', // JSONã‚«ãƒ©ãƒ ã‚’è‡ªå‹•ã§é…åˆ—ã«å¤‰æ›
-    ];
-
-    public function difficulty()//ä¸€ã¤ã®é›£æ˜“åº¦ã«å±žã™ã‚‹
+    public function difficulty(): BelongsTo
     {
         return $this->belongsTo(Difficulty::class);
     }
-    // é–“æŽ¥çš„ã«ã‚³ãƒ¼ã‚¹ã‚’å–å¾—
+
+    /**
+     * ŠÖ˜A“I‚ÉƒR[ƒX‚ðŽæ“¾
+     */
     public function course()
     {
+        // difficultyƒŠƒŒ[ƒVƒ‡ƒ“‚ðŒo—R‚µ‚ÄCourseƒ‚ƒfƒ‹‚ðŽæ“¾‚µ‚Ü‚·
         return $this->difficulty->course;
     }
 }

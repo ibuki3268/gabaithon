@@ -1,0 +1,19 @@
+{
+    "questions": [
+        {
+            "question": "水・液体・液状",
+            "options": ["water", "liquid", "fluid", "moisture"],
+            "answer": "liquid"
+        },
+        {
+            "question": "建物・構造・建築",
+            "options": [
+                "architecture",
+                "building",
+                "structure",
+                "construction"
+            ],
+            "answer": "architecture"
+        }
+    ]
+}
