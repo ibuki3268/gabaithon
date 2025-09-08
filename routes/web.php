@@ -17,6 +17,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'firstshow'])->name('dashboard');
     Route::post('/selectcourse', [HomeController::class, 'selectcourse'])->name('selectcourse');
     Route::post('/selectdifficulty', [HomeController::class, 'selectdifficulty'])->name('selectdifficulty');
+    Route::post('/selectyaku', [HomeController::class, 'selectyaku'])->name('selectyaku');
+    Route::post('/selecthai', [HomeController::class, 'selecthai'])->name('selecthai');
   
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
