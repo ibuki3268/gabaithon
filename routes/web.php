@@ -6,7 +6,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GachaController;
 use App\Http\Controllers\FriendController;
-
+use App\Http\Controllers\GameController;
 
 Route::get('/test', function () {
     return 'Sailテスト成功！Laravel動作中！';
@@ -61,7 +61,17 @@ Route::middleware('auth')->group(function () {
     
     // フレンド削除
     Route::delete('/friends/{friend}', [FriendController::class, 'removeFriend'])->name('friends.remove');
+
+
+
+// 左上ロゴからバトル画面に遷移
+Route::get('/battle', [GameController::class, 'battle'])->name('battle');
+
+// index（学習モードや牌確認用）
+Route::get('/game', [GameController::class, 'index'])->name('game');
 });
+
+
 
 // 認証ルート
 require __DIR__.'/auth.php';
