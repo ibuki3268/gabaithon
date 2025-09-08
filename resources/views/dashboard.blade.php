@@ -10,11 +10,12 @@
 
                 {{-- メインコンテンツ --}}
                 {{-- キャラ表示 --}}
-                <div class="w-80">
-                    <div class="bg-pink-300 p-6 rounded-lg">
-                        <div class="text-center text-gray-800 font-medium">
-                            ガチャ機能やキャラ実装したら使う
-                        </div>
+                <div class="flex items-center justify-center min-h-screen">
+                    <div class="w-80 text-center">
+                        <!-- キャラクター画像 -->
+                        <img src="/assets/character/tobakurou.png" 
+                            alt="Tobakurou" 
+                            class="mx-auto mb-4 rounded-lg shadow-lg">
                     </div>
                 </div>
                 {{-- キャラ表示 --}}
@@ -31,7 +32,7 @@
                                 data-csrf-token="{{ csrf_token() }}"
                                 class="h-96 overflow-y-auto px-6 pb-8">
                                 <div x-data="{ hasProgress: @json($hasProgress) }">
-                                    <h3 class="text-lg font-bold mb-4">学習モードを選択してください</h3>
+                                    <h3 class="text-lg font-bold m-4">学習モードを選択してください</h3>
                                     <button @click="selectcourse('new')"
                                         class="w-full text-left p-4 rounded-lg transition bg-orange-500 hover:bg-orange-600 text-white">
                                         <div class="font-semibold">新規学習</div>
