@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sutehai', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('question_id')->constrained('courses')->onDelete('cascade');
-            $table->foreignId('tile_id')->constrained('tiles')->onDelete('cascade');            
-            $table->timestamps();
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id(); 
+            $table->string('categoryname'); 
+            $table->timestamps(); // 作成日時など
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sutehai');
+        Schema::dropIfExists('categories');
     }
 };

@@ -12,11 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('questions', function (Blueprint $table) {
-            $table->id(); // 問題を区別するためのID
-            //$table->foreignId('course_id')->constrained()->onDelete('cascade'); // どの牌に属する問題か
-            //$table->foreignId('difficulty_id')->constrained()->onDelete('cascade');
-            $table->integer('day');
-            $table->json('question');
+            $table->id(); // 牌を区別するためのID
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade'); // カテゴリーID
+            $table->string('question'); // 問題本文
             $table->timestamps(); // 作成日時など
         });
     }

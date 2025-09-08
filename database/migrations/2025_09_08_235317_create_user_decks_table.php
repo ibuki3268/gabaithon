@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('courses', function (Blueprint $table) {
+            Schema::create('user_decks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('category');
-            $table->text('description')->nullable();
-            $table->foreignId('created_by')->nullable()->default(null)->constrained('users')->onDelete('set null');
-            $table->boolean('is_public')->default(true);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('name'); // デッキ名
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('courses');
+        Schema::dropIfExists('user_decks');
     }
 };
