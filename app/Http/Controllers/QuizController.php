@@ -3,235 +3,225 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Progress;
-use App\Models\Question;
-use App\Models\Tile;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class QuizController extends Controller
 {
     /**
-     * �w�肳�ꂽ�v�Ɋ֘A����N�C�Y�̈ꗗ��\��
+     * クイズを開始する
      */
-    public function show(Tile $tile)
+    public function start(Request $request)
     {
-        $questions = $tile->questions()->get();
-
-        return view('quiz.show', [
-            'tile' => $tile,
-            'questions' => $questions,
-        ]);
-    }
-
-    /**
-     * �N�C�Y���J�n���A�ŏ��̖���\������
-     */
-    public function start(Request $request, $course = null, $difficulty = null, $yaku = null)
-    {
-        $courseId = $course ?? 1;
-        $difficultyId = $difficulty ?? 1;
-        $yakuId = $yaku ?? 1;
-
-        $progress = Progress::firstOrCreate(
-            ['user_id' => Auth::id()],
-            [
-                'day' => 1,
-                'course_id' => $courseId,
-                'difficulty_id' => $difficultyId,
-                'progresses' => [],
-                'yaku_id' => $yakuId,
-                'status' => 'started',
-            ]
-        );
-
-        $questionRecords = Question::where('day', $progress->day)
-            ->where('course_id', $courseId)
-            ->where('difficulty_id', $difficultyId)
+        $categoryId = $request->get('category_id');
+        
+        // カテゴリー情報を取得
+        $category = DB::table('categories')->where('id', $categoryId)->first();
+        
+        if (!$category) {
+            return redirect()->route('dashboard')->with('error', 'カテゴリーが見つかりません。');
+        }
+        
+        // このカテゴリーの問題をランダムに3つ取得
+        $questions = DB::table('questions')
+            ->where('category_id', $categoryId)
             ->inRandomOrder()
-            ->get()
-            ->toArray();
-
-        $questions = [];
-        foreach ($questionRecords as $record) {
-            if (isset($record['question']) && is_array($record['question'])) {
-                if (isset($record['question']['questions']) && is_array($record['question']['questions'])) {
-                    foreach ($record['question']['questions'] as $q) {
-                        $questions[] = [
-                            'text' => $q['question'] ?? '��蕶�Ȃ�',
-                            'options' => $q['options'] ?? [],
-                            'answer' => $q['answer'] ?? '',
-                            'id' => $record['id'] ?? null,
-                            'tile_id' => $record['id'] ?? null
-                        ];
+            ->limit(3)
+            ->get();
+        
+        if ($questions->isEmpty()) {
+            return view('quiz.no_questions', compact('category'));
+        }
+        
+        // choicesテーブルから選択肢を取得
+        $questionsWithOptions = [];
+        foreach ($questions as $question) {
+            // 1つの問題に対するすべての選択肢を取得
+            $choices = DB::table('choices')
+                ->where('question_id', $question->id)
+                ->get();
+            
+            if ($choices->isNotEmpty()) {
+                $options = [];
+                $correctIndex = 0;
+                
+                foreach ($choices as $index => $choice) {
+                    $options[] = $choice->text;
+                    // is_correctが1の場合、そのインデックスを記録
+                    if ($choice->is_correct == 1) {
+                        $correctIndex = $index;
                     }
-                } else {
-                    $questions[] = [
-                        'text' => $record['question']['question'] ?? $record['question']['text'] ?? '��蕶�Ȃ�',
-                        'options' => $record['question']['options'] ?? [],
-                        'answer' => $record['question']['answer'] ?? '',
-                        'id' => $record['id'] ?? null,
-                        'tile_id' => $record['id'] ?? null
+                }
+                
+                if (!empty($options)) {
+                    $questionsWithOptions[] = [
+                        'id' => $question->id,
+                        'text' => $question->question,
+                        'options' => $options,
+                        'correct_index' => $correctIndex
                     ];
                 }
-            } elseif (isset($record['question']) && is_string($record['question'])) {
-                $decoded = json_decode($record['question'], true);
-                if ($decoded && isset($decoded['questions'])) {
-                    foreach ($decoded['questions'] as $q) {
-                        $questions[] = [
-                            'text' => $q['question'] ?? '��蕶�Ȃ�',
-                            'options' => $q['options'] ?? [],
-                            'answer' => $q['answer'] ?? '',
-                            'id' => $record['id'] ?? null,
-                            'tile_id' => $record['id'] ?? null
-                        ];
-                    }
-                }
             }
         }
-
-        if (empty($questions)) {
-            return view('quiz.no_questions');
+        
+        if (empty($questionsWithOptions)) {
+            return view('quiz.no_questions', compact('category'));
         }
-
-        foreach ($questions as &$question) {
-            if (is_array($question['options'])) {
-                shuffle($question['options']);
-            }
-        }
-
-        $request->session()->put('questions', $questions);
-        $request->session()->put('quiz_index', 0);
-        $request->session()->put('score', []);
-        $request->session()->put('current_course_id', $courseId);
-        $request->session()->put('current_difficulty_id', $difficultyId);
-        $request->session()->put('current_yaku_id', $yakuId);
-
-        return view('quiz.index', ['question' => $questions[0]]);
+        
+        // セッションにクイズデータを保存
+        Session::put('quiz_data', [
+            'category_id' => $categoryId,
+            'questions' => $questionsWithOptions,
+            'current_index' => 0,
+            'score' => [],
+            'answers' => []
+        ]);
+        
+        return $this->showQuestion();
     }
-
+    
     /**
-     * ���[�U�[�̉񓚂�����
+     * 現在の問題を表示する
+     */
+    public function showQuestion()
+    {
+        $quizData = Session::get('quiz_data');
+        
+        if (!$quizData) {
+            return redirect()->route('dashboard');
+        }
+        
+        $currentIndex = $quizData['current_index'];
+        $questions = $quizData['questions'];
+        
+        if ($currentIndex >= count($questions)) {
+            return $this->showResult();
+        }
+        
+        $category = DB::table('categories')->where('id', $quizData['category_id'])->first();
+        $question = $questions[$currentIndex];
+        
+        return view('quiz.index', [
+            'category' => $category,
+            'question' => $question,
+            'current_question' => $currentIndex + 1,
+            'total_questions' => count($questions)
+        ]);
+    }
+    
+    /**
+     * 回答を処理する
      */
     public function answer(Request $request)
     {
-        $questions = $request->session()->get('questions', []);
-        $index = $request->session()->get('quiz_index', 0);
-        $score = $request->session()->get('score', []);
-
-        if (empty($questions) || !isset($questions[$index])) {
-            return redirect()->route('quiz.result');
+        $quizData = Session::get('quiz_data');
+        
+        if (!$quizData) {
+            return redirect()->route('dashboard');
         }
-
-        $selectedAnswer = $request->input('selected');
-        $correctAnswer = $questions[$index]['answer'] ?? null;
-        $score[] = ($selectedAnswer === $correctAnswer);
-
-        $index++;
-        $request->session()->put('quiz_index', $index);
-        $request->session()->put('score', $score);
-
-        if ($index >= count($questions) || count($questions) === 0) {
-            return redirect()->route('quiz.result');
+        
+        $selectedOption = $request->get('selected');
+        $currentIndex = $quizData['current_index'];
+        $currentQuestion = $quizData['questions'][$currentIndex];
+        
+        // 選択された回答のインデックスを取得
+        $selectedIndex = null;
+        foreach ($currentQuestion['options'] as $index => $option) {
+            if ($option === $selectedOption) {
+                $selectedIndex = $index;
+                break;
+            }
         }
-
-        return view('quiz.index', ['question' => $questions[$index]]);
+        
+        // 回答をセッションに保存
+        $isCorrect = $selectedIndex !== null && $selectedIndex === $currentQuestion['correct_index'];
+        $correctAnswer = $currentQuestion['options'][$currentQuestion['correct_index']] ?? '';
+        
+        $quizData['answers'][$currentIndex] = $selectedOption;
+        $quizData['score'][$currentIndex] = [
+            'selected' => $selectedOption,
+            'correct' => $correctAnswer,
+            'is_correct' => $isCorrect
+        ];
+        
+        // 次の問題へ
+        $quizData['current_index']++;
+        
+        Session::put('quiz_data', $quizData);
+        
+        // 全問題が終了した場合は結果画面へ
+        if ($quizData['current_index'] >= count($quizData['questions'])) {
+            return $this->showResult();
+        }
+        
+        return $this->showQuestion();
     }
-
+    
     /**
-     * �N�C�Y�̌��ʂ�\��
+     * クイズ結果を表示する
      */
-    public function result(Request $request)
+    public function showResult()
     {
-        $score = $request->session()->get('score', []);
-        $questions = $request->session()->get('questions', []);
-        $courseId = $request->session()->get('current_course_id', 1);
-        $difficultyId = $request->session()->get('current_difficulty_id', 1);
-        $yakuId = $request->session()->get('current_yaku_id', 1);
-
-        if (empty($score) || empty($questions)) {
-            return redirect()->route('quiz.start')->with('error', '�N�C�Y�Z�b�V������������܂���ł����B');
+        $quizData = Session::get('quiz_data');
+        
+        if (!$quizData) {
+            return redirect()->route('dashboard');
         }
-
-        $total = count($score);
-        $correctCount = count(array_filter($score));
+        
+        $category = DB::table('categories')->where('id', $quizData['category_id'])->first();
+        $score = $quizData['score'];
+        $questions = $quizData['questions'];
+        
+        // スコア計算
+        $correctCount = 0;
+        foreach ($score as $result) {
+            if ($result['is_correct']) {
+                $correctCount++;
+            }
+        }
+        
+        $total = count($questions);
         $percentage = $total > 0 ? ($correctCount / $total) * 100 : 0;
-        $pass = $percentage >= 80;
-
-        $progress = Progress::firstOrCreate(
-            ['user_id' => Auth::id()],
-            [
-                'day' => 1,
-                'course_id' => $courseId,
-                'difficulty_id' => $difficultyId,
-                'progresses' => [],
-                'newstudy' => true,
-                'yaku_id' => $yakuId,
-                'status' => 'started',
-            ]
-        );
-
-        $this->updateProgresses($progress, $questions, $pass);
-
-        $request->session()->forget(['questions', 'quiz_index', 'score', 'current_course_id', 'current_difficulty_id', 'current_yaku_id']);
-
-        return view('quiz.result', compact('score', 'questions', 'total', 'correctCount', 'percentage', 'pass'));
-    }
-
-    /**
-     * �v���O���X�f�[�^���X�V
-     */
-    private function updateProgresses($progress, $questions, $pass)
-    {
-        $ps = $progress->progresses;
-        if (empty($ps)) {
-            $ps = [];
-        }
-
-        foreach ($questions as $question) {
-            $tileId = $this->getTileId($question);
-            if ($tileId === null) {
-                Log::warning('No tile_id found for question', ['question' => $question]);
-                continue;
-            }
-
-            if ($pass) {
-                if (!isset($ps[$tileId]) || $ps[$tileId] === null) {
-                    $ps[$tileId] = $progress->day;
-                    Log::debug('Set day for passed tile', [
-                        'user_id' => $progress->user_id,
-                        'tile_id' => $tileId,
-                        'day' => $progress->day
-                    ]);
-                }
-            }
-        }
-
-           // ���i�E�s���i�Ɋւ�炸 newstudy �� false �ɂ���
-    $progress->newstudy = false;
-
-    $progress->save();
-
-    Log::debug('Updated progresses', [
-        'user_id' => $progress->user_id,
-        'pass' => $pass,
-        'updated_progresses' => $ps,
-        'newstudy' => $progress->newstudy
+        $pass = $percentage >= 70; // 70%以上で合格
+        
+        return view('quiz.result', [
+            'category' => $category,
+            'score' => $score,
+            'questions' => $questions,
+            'correctCount' => $correctCount,
+            'total' => $total,
+            'percentage' => $percentage,
+            'pass' => $pass
         ]);
     }
-
+    
     /**
-     * ���f�[�^���� tile_id ���擾
+     * クイズを再挑戦する
      */
-    private function getTileId($question)
+    public function retry()
     {
-        if (is_array($question)) {
-            if (array_key_exists('tile_id', $question)) return $question['tile_id'];
-            if (array_key_exists('id', $question)) return $question['id'];
-        } elseif (is_object($question)) {
-            if (isset($question->tile_id)) return $question->tile_id;
-            if (isset($question->id)) return $question->id;
+        $quizData = Session::get('quiz_data');
+        
+        if (!$quizData) {
+            return redirect()->route('dashboard');
         }
-        return null;
+        
+        // セッションをクリアして新しく開始
+        Session::forget('quiz_data');
+        
+        // 同じカテゴリーで新しい問題を取得
+        $request = new Request();
+        $request->merge(['category_id' => $quizData['category_id']]);
+        
+        return $this->start($request);
+    }
+    
+    /**
+     * クイズセッションを終了してホームに戻る
+     */
+    public function finish()
+    {
+        Session::forget('quiz_data');
+        return redirect()->route('dashboard');
     }
 }
