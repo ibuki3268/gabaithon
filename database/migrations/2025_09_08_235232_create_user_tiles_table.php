@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('difficulties', function (Blueprint $table) {
+        Schema::create('user_tiles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->json('choice');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('tile_id')->constrained('tiles')->onDelete('cascade');
+            $table->integer('count')->default(0); // その牌を何枚持っているか
             $table->timestamps();
+
+            $table->unique(['user_id', 'tile_id']);
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('difficulties');
+        Schema::dropIfExists('user_tiles');
     }
 };

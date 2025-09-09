@@ -1,67 +1,35 @@
 <?php
-
+// Question.php - é–¢é€£æ€§ã‚’è¿½åŠ 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Question extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'questions';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    // Seeder‚Å‚Ì—˜—p‚É‡‚í‚¹‚ÄAˆêŠ‡‘ã“ü‰Â”\‚È‘®«‚ğXV
     protected $fillable = [
-        'day',
-        'course_id',
-        'difficulty_id',
+        'category_id',
+        'tile_id',
         'question',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'question' => 'array', // 'question'ƒJƒ‰ƒ€‚ğJSON‚©‚ç”z—ñ‚Ö©“®•ÏŠ·
-    ];
+    // ã‚«ãƒ†ã‚´ãƒªãƒ¼ã¨ã®é–¢é€£ (å¤šå¯¾1)
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
-    /**
-     * ‚±‚Ì–â‘è‚ª‘®‚·‚é”viTilej‚ğæ“¾‚·‚é (‘½‘Î1)
-     * ’ˆÓ: ‚±‚ÌƒŠƒŒ[ƒVƒ‡ƒ“‚ğ‹@”\‚³‚¹‚é‚É‚Í 'questions' ƒe[ƒuƒ‹‚É 'tile_id' ƒJƒ‰ƒ€‚ª•K—v‚Å‚·B
-     */
-    public function tile(): BelongsTo
+    // é¸æŠè‚¢ã¨ã®é–¢é€£ (1å¯¾å¤š)
+    public function choices()
+    {
+        return $this->hasMany(Choice::class);
+    }
+
+    // ç‰Œã¨ã®é–¢é€£ (å¤šå¯¾1)
+    public function tile()
     {
         return $this->belongsTo(Tile::class);
-    }
-
-    /**
-     * ˆê‚Â‚Ì“ïˆÕ“x‚É‘®‚·‚é
-     */
-    public function difficulty(): BelongsTo
-    {
-        return $this->belongsTo(Difficulty::class);
-    }
-
-    /**
-     * ŠÖ˜A“I‚ÉƒR[ƒX‚ğæ“¾
-     */
-    public function course()
-    {
-        // difficultyƒŠƒŒ[ƒVƒ‡ƒ“‚ğŒo—R‚µ‚ÄCourseƒ‚ƒfƒ‹‚ğæ“¾‚µ‚Ü‚·
-        return $this->difficulty->course;
     }
 }
