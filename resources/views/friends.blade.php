@@ -16,7 +16,7 @@
 
                     {{-- 左側：フレンド機能タブ --}}
                     <div style="width: 500px; min-width: 500px;">
-                        <div class="bg-white dark:bg-gray-800 border-2 border-green-500 rounded-lg shadow-lg h-96">
+                        <div class="bg-white dark:bg-gray-800 border-2 border-white rounded-lg shadow-lg h-96">
                             <div class="h-full overflow-y-auto p-4">
                                 <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200 sticky top-0 bg-white dark:bg-gray-800 pb-2">フレンド機能</h3>
                                 <div class="space-y-2">
@@ -46,7 +46,7 @@
                                     <button @click="selectedTab = 'search'" 
                                             :class="selectedTab === 'search' ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-300'"
                                             class="w-full text-left p-3 rounded-lg transition font-medium">
-                                        フレンド検索
+                                        検索
                                     </button>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                     </div>
 
                     {{-- 右側：選択したタブのコンテンツ --}}
-                    <div class="flex-1 bg-white dark:bg-gray-800 border-2 border-green-500 rounded-lg shadow-lg h-96">
+                    <div class="flex-1 bg-white dark:bg-gray-800 border-2 border-white rounded-lg shadow-lg h-96">
                         <div class="h-full overflow-y-auto p-6 pr-8">
 
                             {{-- フレンド一覧 --}}
@@ -106,7 +106,7 @@
 
                             {{-- 受信申請 --}}
                             <div x-show="selectedTab === 'requests'">
-                                <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">フレンド申請（受信）</h3>
+                                <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">受信申請</h3>
                                 @if(count($friendRequests) > 0)
                                 <div class="space-y-3">
                                     @foreach($friendRequests as $request)
