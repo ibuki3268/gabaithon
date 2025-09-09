@@ -67,7 +67,7 @@
             <div class="hand-count text-sm text-gray-600 dark:text-gray-400 mb-2">
                 手牌: {{ count($hands['player1']) }}枚
             </div>
-            <div class="tiles flex flex-wrap gap-2">
+            <div class="tiles-container flex flex-wrap gap-2">
                 @foreach($hands['player1'] as $index => $tile)
                     @if($currentPlayer === 'player1' && count($hands['player1']) === 14)
                         <button class="tile game-action-btn bg-white border-2 border-gray-300 px-3 py-2 rounded-lg hover:bg-gray-100 hover:border-blue-400 transform hover:scale-105 transition-all duration-200 shadow-sm" 
@@ -87,7 +87,7 @@
         <!-- 捨て牌表示 -->
         <div id="player1-discards" class="discard-area">
             <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">捨て牌:</div>
-            <div class="flex flex-wrap gap-1">
+            <div class="discards-container flex flex-wrap gap-1">
                 @foreach($discards['player1'] as $index => $tile)
                     <span class="discarded-tile bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-sm cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600"
                           onclick="checkRonOnTile('player1', {{ $index }})"
@@ -117,7 +117,7 @@
             <div class="hand-count text-sm text-gray-600 dark:text-gray-400 mb-2">
                 手牌: {{ count($hands['player2']) }}枚
             </div>
-            <div class="tiles flex flex-wrap gap-2">
+            <div class="tiles-container flex flex-wrap gap-2">
                 @for($i = 0; $i < count($hands['player2']); $i++)
                     <div class="tile-back bg-gray-500 px-3 py-2 rounded-lg text-white shadow-sm">🀫</div>
                 @endfor
@@ -126,7 +126,7 @@
         
         <div id="player2-discards" class="discard-area">
             <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">捨て牌:</div>
-            <div class="flex flex-wrap gap-1">
+            <div class="discards-container flex flex-wrap gap-1">
                 @foreach($discards['player2'] as $index => $tile)
                     <span class="discarded-tile bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-sm cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600"
                           onclick="checkRonOnTile('player2', {{ $index }})"
@@ -156,7 +156,7 @@
             <div class="hand-count text-sm text-gray-600 dark:text-gray-400 mb-2">
                 手牌: {{ count($hands['player3']) }}枚
             </div>
-            <div class="tiles flex flex-wrap gap-2">
+            <div class="tiles-container flex flex-wrap gap-2">
                 @for($i = 0; $i < count($hands['player3']); $i++)
                     <div class="tile-back bg-gray-500 px-3 py-2 rounded-lg text-white shadow-sm">🀫</div>
                 @endfor
@@ -165,7 +165,7 @@
         
         <div id="player3-discards" class="discard-area">
             <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">捨て牌:</div>
-            <div class="flex flex-wrap gap-1">
+            <div class="discards-container flex flex-wrap gap-1">
                 @foreach($discards['player3'] as $index => $tile)
                     <span class="discarded-tile bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-sm cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600"
                           onclick="checkRonOnTile('player3', {{ $index }})"
@@ -390,14 +390,16 @@ document.addEventListener('DOMContentLoaded', function() {
         Object.keys(hands).forEach(player => {
             const handCountElement = document.querySelector(`#${player}-hand .hand-count`);
             if (handCountElement && hands[player]) {
-                handCountElement.textContent = `手牌: ${hands[player].count}枚`;
+                // VsControllerから送信されるデータ構造に対応
+                const handSize = hands[player].count || hands[player].length || 0;
+                handCountElement.textContent = `手牌: ${handSize}枚`;
             }
         });
     }
 
     function updateDiscardPiles(discards) {
         Object.keys(discards).forEach(player => {
-            const discardContainer = document.querySelector(`#${player}-discards .flex`);
+            const discardContainer = document.querySelector(`#${player}-discards .discards-container`);
             if (discardContainer && discards[player]) {
                 // 捨て牌エリアを更新
                 discardContainer.innerHTML = '';

@@ -51,6 +51,7 @@ class GameStateUpdate implements ShouldBroadcast
     {
         return [
             'gameData' => $this->gameData,
+            'gameId' => $this->gameId,
             'timestamp' => now()->toISOString(),
         ];
     }

@@ -24,6 +24,9 @@
                     <x-nav-link :href="route('friends')" :active="request()->routeIs('friends')">
                         {{ __('フレンド') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('vs.battle')" :active="request()->routeIs('vs.*')">
+                        🀄 麻雀対戦
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -88,6 +91,9 @@
             <x-responsive-nav-link :href="route('friends')" :active="request()->routeIs('friends')">
                 {{ __('フレンド') }}
             </x-responsive-nav-link>
+            <x-nav-link :href="route('vs.battle')" :active="request()->routeIs('vs.*')">
+                🀄 麻雀対戦
+            </x-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->

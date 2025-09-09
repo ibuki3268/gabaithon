@@ -53,34 +53,26 @@ Route::middleware('auth')->group(function () {
     Route::delete('/friends/{friend}', [FriendController::class, 'removeFriend'])->name('friends.remove');
 });
 
-// ゲームルート（認証必要）
-Route::middleware('auth')->group(function () {
-    // 学習モード
-    Route::get('/game', [GameController::class, 'index'])->name('game');
+// 麻雀ゲームルート
+Route::middleware('auth')->prefix('vs')->name('vs.')->group(function () {
+    // メイン対戦画面
+    Route::get('/battle', [VsController::class, 'battle'])->name('battle');
     
-    // 対戦モード
-    Route::prefix('vs')->name('vs.')->group(function () {
-        // 対戦画面表示
-        Route::get('/battle', [VsController::class, 'battle'])->name('battle');
-        
-        // ツモして捨てるアクション
-        Route::post('/draw-and-discard/{tileIndex}', [VsController::class, 'drawAndDiscard'])
-            ->name('drawAndDiscard');
-        
-        // ロン判定
-        Route::post('/check-ron/{discardingPlayer}/{tileIndex}', [VsController::class, 'checkRon'])
-            ->name('checkRon');
-            
-        // リーチ宣言
-        Route::post('/declare-riichi/{player}', [VsController::class, 'declareRiichi'])
-            ->name('declareRiichi');
-        
-        // ゲームリセット
-        Route::get('/reset', [VsController::class, 'reset'])->name('reset');
-        
-        // ゲーム統計（API）
-        Route::get('/stats', [VsController::class, 'stats'])->name('stats');
-    });
+    // ゲーム操作
+    Route::get('/draw-discard/{tileIndex}', [VsController::class, 'drawAndDiscard'])->name('draw-discard');
+    Route::get('/riichi/{player}', [VsController::class, 'declareRiichi'])->name('riichi');
+    Route::get('/ron/{discardingPlayer}/{tileIndex}', [VsController::class, 'checkRon'])->name('ron');
+    
+    // ゲーム管理
+    Route::get('/reset', [VsController::class, 'reset'])->name('reset');
+    Route::get('/stats', [VsController::class, 'stats'])->name('stats');
+    
+    // プレイヤー参加・退出（将来の拡張用）
+    Route::post('/join/{playerId}', [VsController::class, 'joinGame'])->name('join');
+    Route::post('/leave/{playerId}', [VsController::class, 'leaveGame'])->name('leave');
+    
+    // ゲーム状態取得（AJAX用）
+    Route::get('/state', [VsController::class, 'getGameState'])->name('state');
 });
 
 // 認証ルート

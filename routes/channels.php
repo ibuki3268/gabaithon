@@ -26,6 +26,6 @@ Broadcast::channel('mahjong-game-{gameId}', function ($user, $gameId) {
 // プライベートゲームルーム用（将来的に認証が必要な場合）
 Broadcast::channel('private-mahjong-game-{gameId}', function ($user, $gameId) {
     // ユーザーがそのゲームに参加する権限があるかチェック
-    // 例：ゲームのプレイヤーリストに含まれているか
-    return $user && in_array($user->id, $this->getGamePlayers($gameId));
+    // 現在は認証済みユーザーなら誰でもアクセス可能
+    return $user !== null;
 });

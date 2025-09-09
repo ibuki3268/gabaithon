@@ -29,14 +29,127 @@
 
             <!-- Page Content -->
             <main>
-                {{ $slot }}
+                @yield('content')
             </main>
         </div>
-    </body>
-            <div class="bg-orange-600 text-white text-center rounded-lg font-bold flex items-center justify-center py-3">
-                <svg class="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                </svg>
-            </div>
 
+        <!-- Pusher接続状態インジケーター -->
+        <div id="connection-status" class="fixed bottom-4 right-4 z-50">
+            <div id="connection-indicator" class="px-3 py-1 rounded-full text-xs font-medium transition-all duration-300">
+                <span id="connection-text">接続中...</span>
+            </div>
+        </div>
+
+        <!-- Laravel Echo初期化スクリプト -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // 接続状態インジケーターの要素
+                const indicator = document.getElementById('connection-indicator');
+                const text = document.getElementById('connection-text');
+                
+                // Laravel Echoの接続状態を監視
+                if (window.Echo) {
+                    console.log('Laravel Echo初期化中...');
+                    
+                    // 接続成功
+                    window.Echo.connector.pusher.connection.bind('connected', function() {
+                        console.log('Pusher接続成功');
+                        indicator.className = 'px-3 py-1 rounded-full text-xs font-medium bg-green-500 text-white transition-all duration-300';
+                        text.textContent = '🟢 オンライン';
+                        
+                        // 3秒後にインジケーターを非表示
+                        setTimeout(() => {
+                            document.getElementById('connection-status').style.opacity = '0';
+                        }, 3000);
+                    });
+                    
+                    // 接続失敗
+                    window.Echo.connector.pusher.connection.bind('failed', function() {
+                        console.error('Pusher接続失敗');
+                        indicator.className = 'px-3 py-1 rounded-full text-xs font-medium bg-red-500 text-white transition-all duration-300';
+                        text.textContent = '🔴 接続失敗';
+                    });
+                    
+                    // 切断
+                    window.Echo.connector.pusher.connection.bind('disconnected', function() {
+                        console.warn('Pusher接続切断');
+                        indicator.className = 'px-3 py-1 rounded-full text-xs font-medium bg-yellow-500 text-white transition-all duration-300';
+                        text.textContent = '🟡 切断';
+                    });
+                    
+                    // 再接続中
+                    window.Echo.connector.pusher.connection.bind('connecting', function() {
+                        console.log('Pusher再接続中...');
+                        indicator.className = 'px-3 py-1 rounded-full text-xs font-medium bg-blue-500 text-white transition-all duration-300';
+                        text.textContent = '🔵 再接続中...';
+                    });
+                    
+                    // エラーハンドリング
+                    window.Echo.connector.pusher.connection.bind('error', function(error) {
+                        console.error('Pusher接続エラー:', error);
+                        indicator.className = 'px-3 py-1 rounded-full text-xs font-medium bg-red-500 text-white transition-all duration-300';
+                        text.textContent = '🔴 エラー';
+                    });
+                    
+                } else {
+                    console.error('Laravel Echoが見つかりません。Pusher設定を確認してください。');
+                    indicator.className = 'px-3 py-1 rounded-full text-xs font-medium bg-red-500 text-white transition-all duration-300';
+                    text.textContent = '🔴 Echo未対応';
+                }
+            });
+        </script>
+
+        <!-- グローバルスタイル -->
+        <style>
+            #connection-status {
+                transition: opacity 0.3s ease-in-out;
+            }
+            
+            /* 通知アニメーション */
+            @keyframes pulse {
+                0%, 100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.7;
+                }
+            }
+            
+            .animate-pulse {
+                animation: pulse 2s infinite;
+            }
+            
+            /* カスタムスクロールバー */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+            
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 4px;
+            }
+            
+            ::-webkit-scrollbar-thumb {
+                background: #c1c1c1;
+                border-radius: 4px;
+            }
+            
+            ::-webkit-scrollbar-thumb:hover {
+                background: #a1a1a1;
+            }
+            
+            /* ダークモード対応 */
+            .dark ::-webkit-scrollbar-track {
+                background: #374151;
+            }
+            
+            .dark ::-webkit-scrollbar-thumb {
+                background: #6b7280;
+            }
+            
+            .dark ::-webkit-scrollbar-thumb:hover {
+                background: #9ca3af;
+            }
+        </style>
+    </body>
 </html>
