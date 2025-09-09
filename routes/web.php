@@ -45,22 +45,11 @@ Route::middleware('auth')->group(function () {
 
 // フレンドルート
 Route::middleware('auth')->group(function () {
-    // フレンド一覧画面
     Route::get('/friends', [FriendController::class, 'index'])->name('friends');
-    
-    // フレンド検索
     Route::get('/friends/search', [FriendController::class, 'search'])->name('friends.search');
-    
-    // フレンド申請送信
     Route::post('/friends/request/{user}', [FriendController::class, 'sendRequest'])->name('friends.request');
-    
-    // フレンド申請承認
     Route::post('/friends/accept/{request}', [FriendController::class, 'acceptRequest'])->name('friends.accept');
-    
-    // フレンド申請拒否
     Route::post('/friends/reject/{request}', [FriendController::class, 'rejectRequest'])->name('friends.reject');
-    
-    // フレンド削除
     Route::delete('/friends/{friend}', [FriendController::class, 'removeFriend'])->name('friends.remove');
 });
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Services\MahjongWinChecker;
+use App\Events\GameStateUpdate; // 追加
 
 class VsController extends Controller
 {
@@ -100,6 +101,11 @@ class VsController extends Controller
                 'totalTiles' => count($allTiles),
                 'wallTiles' => count($wall)
             ]);
+
+            // ゲーム開始をブロードキャスト
+            $this->broadcastGameState($request, 'gameStart', [
+                'message' => '新しいゲームが開始されました'
+            ]);
         }
 
         $hands = $request->session()->get('hands');
@@ -162,6 +168,12 @@ class VsController extends Controller
             ]);
         } else {
             Log::warning("{$currentPlayer} が引こうとしたが山が空");
+            
+            // 流局をブロードキャスト
+            $this->broadcastGameState($request, 'draw', [
+                'message' => '牌山が空になりました。流局です。'
+            ]);
+            
             return redirect()->route('vs.battle')->with('message', '牌山が空になりました。流局です。');
         }
 
@@ -193,6 +205,16 @@ class VsController extends Controller
                     'winCondition' => $winResult,
                     'yaku' => $yakuResult,
                     'finalHand' => $hands[$currentPlayer]
+                ]);
+
+                // ツモ上がりをブロードキャスト
+                $this->broadcastGameState($request, 'win', [
+                    'winner' => $currentPlayer,
+                    'winType' => 'ツモ',
+                    'winCondition' => $winResult,
+                    'yaku' => $yakuResult,
+                    'finalHand' => $hands[$currentPlayer],
+                    'winningTile' => $drawnTile
                 ]);
 
                 return redirect()->route('vs.battle');
@@ -227,7 +249,18 @@ class VsController extends Controller
         $players = ['player1', 'player2', 'player3'];
         $currentIndex = array_search($currentPlayer, $players);
         $nextIndex = ($currentIndex + 1) % count($players);
-        $request->session()->put('currentPlayer', $players[$nextIndex]);
+        $nextPlayer = $players[$nextIndex];
+        $request->session()->put('currentPlayer', $nextPlayer);
+
+        // ツモと捨て牌をブロードキャスト
+        $this->broadcastGameState($request, 'turn', [
+            'action' => 'drawAndDiscard',
+            'player' => $currentPlayer,
+            'drawnTile' => $drawnTile,
+            'discardedTile' => $discardTile,
+            'nextPlayer' => $nextPlayer,
+            'turnCount' => $turnCount + 1
+        ]);
 
         return redirect()->route('vs.battle');
     }
@@ -291,8 +324,26 @@ class VsController extends Controller
                 'discardingPlayer' => $discardingPlayer
             ]);
 
+            // ロン上がりをブロードキャスト
+            $this->broadcastGameState($request, 'win', [
+                'winner' => $winner['player'],
+                'winType' => 'ロン',
+                'winCondition' => $winner['winCondition'],
+                'yaku' => $winner['yaku'],
+                'finalHand' => array_merge($hands[$winner['player']], [$discardedTile]),
+                'discardingPlayer' => $discardingPlayer,
+                'winningTile' => $discardedTile
+            ]);
+
             return redirect()->route('vs.battle');
         }
+
+        // ロンできない場合もブロードキャスト
+        $this->broadcastGameState($request, 'ronCheck', [
+            'message' => 'ロンできるプレイヤーがいません',
+            'discardingPlayer' => $discardingPlayer,
+            'discardedTile' => $discardedTile
+        ]);
 
         return redirect()->route('vs.battle')->with('message', 'ロンできるプレイヤーがいません。');
     }
@@ -312,6 +363,13 @@ class VsController extends Controller
         $request->session()->put("riichi_{$player}", true);
         
         Log::info("{$player} がリーチを宣言");
+        
+        // リーチ宣言をブロードキャスト
+        $this->broadcastGameState($request, 'riichi', [
+            'player' => $player,
+            'action' => 'riichi_declared',
+            'message' => "{$player} がリーチを宣言しました！"
+        ]);
         
         return redirect()->route('vs.battle')->with('message', "{$player} がリーチを宣言しました！");
     }
@@ -348,6 +406,12 @@ class VsController extends Controller
         }
         
         Log::info('セッションリセット');
+        
+        // リセットをブロードキャスト
+        $this->broadcastGameState($request, 'reset', [
+            'message' => 'ゲームがリセットされました'
+        ]);
+        
         return redirect()->route('vs.battle');
     }
 
@@ -369,5 +433,108 @@ class VsController extends Controller
         ];
 
         return response()->json($stats);
+    }
+
+    /**
+     * ゲーム状態をブロードキャストする共通メソッド
+     */
+    private function broadcastGameState(Request $request, $eventType, $additionalData = [])
+    {
+        $hands = $request->session()->get('hands', []);
+        $discards = $request->session()->get('discards', []);
+        $wall = $request->session()->get('wall', []);
+        $currentPlayer = $request->session()->get('currentPlayer');
+        $turnCount = $request->session()->get('turnCount', 0);
+
+        // セキュリティのため、他プレイヤーの手牌は枚数のみ送信
+        $publicHands = [];
+        foreach ($hands as $player => $hand) {
+            $publicHands[$player] = [
+                'count' => count($hand),
+                'tiles' => $player === 'player1' ? $hand : [] // player1の手牌のみ表示（デモ用）
+            ];
+        }
+
+        $gameData = array_merge([
+            'eventType' => $eventType,
+            'hands' => $publicHands,
+            'discards' => $discards,
+            'wallCount' => count($wall),
+            'currentPlayer' => $currentPlayer,
+            'turnCount' => $turnCount,
+            'riichiStatus' => [
+                'player1' => $request->session()->get('riichi_player1', false),
+                'player2' => $request->session()->get('riichi_player2', false),
+                'player3' => $request->session()->get('riichi_player3', false),
+            ],
+            'gameResult' => $request->session()->get('gameResult', null)
+        ], $additionalData);
+
+        // セッションIDをゲームIDとして使用
+        $gameId = $request->session()->getId();
+
+        // イベントをブロードキャスト
+        broadcast(new GameStateUpdate($gameData, $gameId));
+        
+        Log::info('ゲーム状態をブロードキャスト', [
+            'eventType' => $eventType,
+            'gameId' => $gameId,
+            'currentPlayer' => $currentPlayer,
+            'turnCount' => $turnCount
+        ]);
+    }
+
+    /**
+     * プレイヤー参加処理（将来の拡張用）
+     */
+    public function joinGame(Request $request, $playerId)
+    {
+        // プレイヤーの参加をブロードキャスト
+        $this->broadcastGameState($request, 'playerJoin', [
+            'joinedPlayer' => $playerId,
+            'message' => "{$playerId} がゲームに参加しました"
+        ]);
+
+        return response()->json(['status' => 'success', 'player' => $playerId]);
+    }
+
+    /**
+     * プレイヤー退出処理（将来の拡張用）
+     */
+    public function leaveGame(Request $request, $playerId)
+    {
+        // プレイヤーの退出をブロードキャスト
+        $this->broadcastGameState($request, 'playerLeave', [
+            'leftPlayer' => $playerId,
+            'message' => "{$playerId} がゲームを退出しました"
+        ]);
+
+        return response()->json(['status' => 'success', 'player' => $playerId]);
+    }
+
+    /**
+     * ゲーム状態取得（AJAX用）
+     */
+    public function getGameState(Request $request)
+    {
+        $hands = $request->session()->get('hands', []);
+        $discards = $request->session()->get('discards', []);
+        $wall = $request->session()->get('wall', []);
+        $currentPlayer = $request->session()->get('currentPlayer');
+        $turnCount = $request->session()->get('turnCount', 0);
+
+        return response()->json([
+            'hands' => $hands,
+            'discards' => $discards,
+            'wallCount' => count($wall),
+            'currentPlayer' => $currentPlayer,
+            'turnCount' => $turnCount,
+            'riichiStatus' => [
+                'player1' => $request->session()->get('riichi_player1', false),
+                'player2' => $request->session()->get('riichi_player2', false),
+                'player3' => $request->session()->get('riichi_player3', false),
+            ],
+            'gameResult' => $request->session()->get('gameResult', null)
+        ]);
     }
 }
