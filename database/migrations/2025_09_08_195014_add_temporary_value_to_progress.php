@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('progress', function (Blueprint $table) {
+        Schema::create('progress', function (Blueprint $table) {
             $table->integer('temporary_value')->default(null)->nullable();
         });
     }
