@@ -72,7 +72,7 @@
                                                 
                                                 {{-- ユーザー情報 --}}
                                                 <div>
-                                                    <div class="font-semibold text-gray-800 dark:text-gray-200">{{ $friend['name'] }}</div>
+                                                    <div class="font-semibold text-gray-800 dark:text-gray-800">{{ $friend['name'] }}</div>
                                                     <div class="text-sm text-gray-600">Lv.{{ $friend['level'] }}</div>
                                                     <div class="text-xs text-gray-500">
                                                         @if($friend['status'] === 'online')

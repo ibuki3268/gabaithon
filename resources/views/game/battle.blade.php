@@ -37,11 +37,11 @@
         @endif
 
         @foreach($hands as $player => $tiles)
-            <div class="border rounded p-4 {{ $player === $currentPlayer ? 'bg-yellow-100 dark:bg-yellow-800' : 'bg-gray-100 dark:bg-gray-800' }}">
+            <div class="border rounded p-4 {{ $player === $currentPlayer ? 'bg-blue-500 dark:bg-blue-500' : 'bg-white dark:bg-white' }}">
                 <h3 class="font-bold mb-2 flex items-center">
                     {{ $player }}の手牌 ({{ count($tiles) }}枚)
                     @if($player === $currentPlayer)
-                        <span class="ml-2 bg-green-500 text-white px-2 py-1 rounded text-xs">手番</span>
+                        <span class="ml-2 bg-red-500 text-white px-2 py-1 rounded text-xs">手番</span>
                     @endif
                 </h3>
                 
@@ -72,7 +72,7 @@
         @endforeach
 
         <!-- 牌山表示 -->
-        <div class="mt-4 p-4 border rounded bg-gray-200 dark:bg-gray-800">
+        <div class="mt-4 p-4 border rounded bg-white dark:bg-white">
             <h3 class="font-bold mb-2">牌山（残り {{ count($wall) }} 枚）</h3>
             <div class="flex flex-wrap gap-1">
                 @for($i = 0; $i < min(count($wall), 20); $i++)
@@ -105,7 +105,7 @@
         </div>
 
         <!-- 統計表示エリア -->
-        <div id="statsArea" class="hidden mt-4 p-4 border rounded bg-blue-50 dark:bg-blue-900">
+        <div id="statsArea" class="hidden mt-4 p-4 border rounded bg-white dark:bg-white">
             <h4 class="font-bold mb-2">ゲーム統計</h4>
             <div id="statsContent"></div>
         </div>

@@ -20,7 +20,7 @@
 
                 {{-- カテゴリー選択画面 --}}
                 <div class="flex-1 flex flex-col h-screen">
-                    <div class="bg-white dark:bg-gray-800 border-4 border-blue-500 rounded-lg shadow-lg flex-1 flex flex-col">
+                    <div class="bg-white dark:bg-gray-800 border-4 border-gray-500 rounded-lg flex-1 flex flex-col">
                         <div id="change" class="flex-1 overflow-y-auto px-6 pb-8">
                             
                             <h3 class="text-lg font-bold m-4">カテゴリーを選択してください</h3>
